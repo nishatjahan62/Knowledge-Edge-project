@@ -1,8 +1,74 @@
-import React from "react";
-import { Link } from "react-router";
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
+
+import Swal from "sweetalert2";
+import toast from "react-hot-toast";
+import AuthHook from "../../Hooks/AuthHook";
 
 const Register = () => {
-  const handleRegister = () => {};
+  const { createUser, setUser, updateUser, user } = AuthHook();
+
+  //    name & password Validation
+  const [error, setError] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state || "/";
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const photo = form.photo.value;
+    const password = form.password.value;
+    const email = form.email.value;
+
+    //   Validation
+    // Name Validation
+    if (name.length < 6) {
+      setNameError("Name must be at least  5 character");
+      return;
+    } else {
+      setNameError("");
+    }
+    // password validation
+    const upperCase = /[A-Z]/;
+    const lowerCase = /[a-z]/;
+
+    if (password.length < 6) {
+      setPasswordError("password  must be at least 6 character");
+      return;
+    } else if (!upperCase.test(password)) {
+      setPasswordError("PassWord must contain at Least one Uppercase letter");
+      return;
+    } else if (!lowerCase.test(password)) {
+      setPasswordError("PassWord must contain at Least one lowercase letter");
+      return;
+    } else {
+      setPasswordError("");
+    }
+
+    createUser(email, password)
+      .then((res) => {
+        res.user;
+        updateUser({ displayName: name, photoURL: photo }).then(() => {
+          setUser({ ...user, displayName: name, photoURL: photo });
+          navigate(from);
+        });
+        Swal.fire({
+          title: "Created Account",
+          text: "Your account has been registered successfully. ",
+          icon: "success",
+        });
+      })
+      .catch((err) => {
+        const errorMessage = err.message;
+        toast.error(errorMessage);
+        setError(errorMessage);
+      });
+  };
+
   return (
     <div>
       <div className="flex justify-center items-center min-h-screen font-[lora]">
@@ -24,12 +90,13 @@ const Register = () => {
                 placeholder="Name"
                 required
               />
+              {nameError && <p className="text-red-600"> {nameError}</p>}
 
               {/* Photo URL */}
               <label className="label focus:border-blue-300">PHoto URL</label>
               <input
                 name="photo"
-                type="PhotoURL"
+                type="url"
                 className="input focus:border-blue-300"
                 placeholder="PhotoURL"
                 required
@@ -44,6 +111,7 @@ const Register = () => {
                 placeholder="Email"
                 required
               />
+              {error && <p className="text-red-600"> {error}</p>}
 
               {/* password */}
               <label className="label focus:border-blue-300">Password</label>
@@ -54,7 +122,9 @@ const Register = () => {
                 placeholder="Password"
                 required
               />
-
+              {passwordError && (
+                <p className="text-red-600"> {passwordError}</p>
+              )}
               <button type="submit" className="w-40 mx-auto pt-4">
                 <div class="relative rounded py-2 overflow-hidden group bg-blue-500  hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300">
                   <span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
@@ -67,7 +137,7 @@ const Register = () => {
                   Already have an account?
                   <Link
                     className="font-bold text-blue-700 link link-hover "
-                    to="/auth/Login"
+                    to="/auth/login"
                   >
                     {" "}
                     Login

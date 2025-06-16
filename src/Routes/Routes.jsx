@@ -25,6 +25,7 @@ export const router = createBrowserRouter([
       {
         path: "all-articles",
         element: <AllArticles></AllArticles>,
+      
       },
       {
         path: "about-us",
@@ -33,16 +34,16 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/",
+    path: "/auth",
     element: <AuthLayout></AuthLayout>,
     errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
-        path: "auth/login",
+        path: "/auth/Login",
         element: <Login></Login>,
       },
       {
-        path: "auth/register",
+        path: "/auth/register",
         element: <Register></Register>,
       },
     ],

@@ -1,15 +1,76 @@
-import React from "react";
-import { Link } from "react-router";
+import React, { use, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
+import Swal from "sweetalert2";
+import toast from "react-hot-toast";
+
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import AuthContext from "../../Provider/AuthContext";
 
 const Login = () => {
-  const handleLogin = () => {};
-  const handleGoogleSignIn = () => {};
+  const { logIn, SignInWithGoogle } = use(AuthContext);
+  const [error, setError] = useState();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state || "/";
+  const emailRef = useRef();
 
-  const handleForgetPassword = () => {};
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    logIn(email, password)
+      .then((res) => {
+        const user = res.user;
+        console.log(user);
+        navigate(from);
+        Swal.fire({
+          title: "Welcome Back!",
+          text: "You have successfully logged in. ",
+          icon: "success",
+        });
+      })
+      .catch((err) => {
+        const errorMessage = err.message;
+        setError(errorMessage);
+      });
+  };
+  const handleGoogleSignIn = (e) => {
+    e.preventDefault();
+    SignInWithGoogle()
+      .then((res) => {
+        const user = res.user;
+        console.log(user);
+        navigate(`${location.state ? location.state : "/"}`);
+        Swal.fire({
+          title: "Welcome Back!",
+          text: "You have successfully logged in. ",
+          icon: "success",
+        });
+      })
+      .catch((err) => {
+        const errorMessage = err.message;
+        setError(errorMessage);
+      });
+  };
+
+  const handleForgetPassword = () => {
+    const email = emailRef.current.value;
+    const auth = getAuth();
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        toast.success("A new Password has been sent in your email.", {});
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        setError(errorMessage);
+      });
+  };
 
   return (
     <div>
-      <div className="flex justify-center items-center min-h-screen font-[lora] lg:pt-20 pt-15 px-5" >
+      <div className="flex justify-center items-center min-h-screen font-[lora] lg:pt-20 pt-15 px-5">
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl mx-auto  border-blue-500 border">
           <div className="">
             <div className="text-center font-semibold text-lg font-[poppins] pt-5 ">
@@ -60,6 +121,7 @@ const Login = () => {
                 <input
                   name="email"
                   type="email"
+                  ref={emailRef}
                   className="input focus:border-blue-500"
                   placeholder="Email"
                   required
@@ -76,6 +138,7 @@ const Login = () => {
                 <div onClick={handleForgetPassword}>
                   <a className="link link-hover">Forgot password?</a>
                 </div>
+                {error && <p className="text-red-600"> {error}</p>}
 
                 <button type="submit" className="w-40 mx-auto">
                   <div class="relative rounded py-2 overflow-hidden group bg-blue-500  hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300">

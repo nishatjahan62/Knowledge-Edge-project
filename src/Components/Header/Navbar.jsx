@@ -1,7 +1,9 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
+import AuthHook from "../../Hooks/AuthHook";
 
 const Navbar = () => {
+  
   const NavLinks = (
     <ul className="flex lg:flex-row flex-col items-center justify-center gap-2 lg:gap-4 text-lg ">
       <NavLink
@@ -39,9 +41,9 @@ const Navbar = () => {
   );
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center ">
       <div className="fixed top-5 w-10/12 mx-auto z-50 ">
-        <div className="flex justify-between gap-20  w-full px-5 py-2  bg-[#FDFBD4] rounded-full shadow-xl border border-blue-600">
+        <div className="flex justify-between gap-5 sm:gap-15  w-full sm:px-5  px-3 py-2  bg-[#FDFBD4] rounded-full shadow-xl border border-blue-600 overflow-hidden" >
           <div className="navbar-start">
             <div className="dropdown block p-0">
               <div
@@ -74,30 +76,31 @@ const Navbar = () => {
             </div>
             <a className="btn btn-ghost text-xl">daisyUI</a>
           </div>
+     
           <div className="navbar-center hidden lg:flex">
             <ul className="menu menu-vertical px-1">{NavLinks}</ul>
           </div>
           <div className="navbar-end">
-            <Link to="/auth/login">
+            <Link to="auth/Login">
             <button
               href="#_"
-              class="inline-flex items-center justify-center px-5 py-3 text-base font-bold text-center  border border-blue-500 rounded-full shadow-sm cursor-pointer hover:text-white bg-gradient-to-br from-blue-500 via-blue-500 to-blue-500 text-white"
+              className="inline-flex items-center justify-center px-5 py-3 text-base font-bold text-center  border border-blue-500 rounded-full shadow-sm cursor-pointer hover:text-white bg-gradient-to-br from-blue-500 via-blue-500 to-blue-500 text-white"
             >
               <svg
-                class="w-5 h-5 mr-2"
+                className="w-5 h-5 mr-2"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                 strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M13 10V3L4 14h7v7l9-11h-7z"
                 ></path>
               </svg>
-              <span class="relative font-bold font-[poppins]">Login </span>
+              <span className="relative font-bold font-[poppins]">Login </span>
             </button>
             </Link>
           </div>
