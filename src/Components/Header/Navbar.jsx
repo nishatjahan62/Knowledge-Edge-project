@@ -41,7 +41,7 @@ const Navbar = () => {
   return (
     <div className="flex justify-center">
       <div className="fixed top-5 w-10/12 mx-auto z-50 ">
-        <div className="flex justify-between gap-20  w-full px-5 py-2  bg-white rounded-full shadow-xl border border-blue-600">
+        <div className="flex justify-between gap-20  w-full px-5 py-2  bg-[#FDFBD4] rounded-full shadow-xl border border-blue-600">
           <div className="navbar-start">
             <div className="dropdown block p-0">
               <div
