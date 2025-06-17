@@ -6,7 +6,7 @@ const Footer = () => {
     <div>
       <footer
         className=" 
-            bg-[#FDFBD4]  text-black lg:footer-horizontal mt-10 md:mt-15 lg:mt-20  p-5 pt-5 md:px-10 lg:px-20"
+            bg-[#FDFBD4] dark:bg-[#252728]   lg:footer-horizontal mt-10 md:mt-15 lg:mt-20  p-5 pt-5 md:px-10 lg:px-20"
       >
         <div
           className="flex lg:flex-row flex-col lg:items-center justify-around lg:gap-10 p-2

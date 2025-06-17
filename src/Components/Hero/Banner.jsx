@@ -4,16 +4,16 @@ import { Link } from "react-router";
 
 const Banner = () => {
   return (
-    <div className="mt-10 hero bg-[#FDFBD4] lg:pt-15 py-5 lg:pb-0 rounded-4xl  shadow-2xl ">
+    <div className="hero  bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a]  pt-10 py-5 lg:pb-0 rounded-4xl  shadow-2xl ">
       <div className="hero-content flex-col lg:flex-row-reverse">
         <div className="flex-1 flex flex-col gap-4 items-center lg:items-end relative justify-center">
           <img
             src="/article01.jpg"
-            className="lg:max-w-md w-[90%] rounded-2xl shadow-2xl "
+            className="lg:max-w-md w-70 md:w-80 lg:w-[90%] rounded-2xl shadow-2xl "
           />
             <img
             src="/article02.jpg"
-            className="lg:max-w-md rounded-2xl  w-[90%] shadow-2xl lg:relative lg:-top-20 lg:left-20 "
+            className="lg:max-w-md rounded-2xl w-70 md:w-80 lg:w-[90%] shadow-2xl lg:relative lg:-top-20 lg:left-20 relative -top-15 left-5 "
           />
 
         </div>
@@ -26,7 +26,7 @@ const Banner = () => {
           >
             Share Your Knowledge 
           </motion.h1>
-          <p className="py-6">
+          <p className="py-6 ">
             Let your thoughts flow into the world. Write with passion. 
             Share with purpose.
           </p>

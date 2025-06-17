@@ -9,7 +9,8 @@ import AuthLayout from "../Layouts/AuthLayout";
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
 import ErrorLayout from "../Layouts/ErrorLayout";
-
+import CategoryPage from "../Components/Hero/CategoryPage";
+import ArticleDetails from "../Pages/articleDetails/ArticleDetails";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -25,11 +26,21 @@ export const router = createBrowserRouter([
       {
         path: "all-articles",
         element: <AllArticles></AllArticles>,
-      
       },
       {
         path: "about-us",
         element: <AboutUs></AboutUs>,
+      },
+      {
+        path: "article-by-category/:category",
+        element: <CategoryPage></CategoryPage>,
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/articles/?category=${params.category}`),
+      },
+      {
+        path: "article/:id",
+        element: <ArticleDetails></ArticleDetails>,
+        loader: ({ params }) =>fetch(`http://localhost:5000/articles/${params.id}`),
       },
     ],
   },

@@ -8,4 +8,7 @@
 html{
   background-color:#F4F2D0;
 }
+html.dark{
+background-color: #1C1C1D;
+}
 
