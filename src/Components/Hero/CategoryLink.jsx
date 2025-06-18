@@ -16,7 +16,7 @@ const CategoryLink = () => {
   }, []);
 
   return (
-    <div className="mt-10 mx-5 lg:mx-10 bg-[#F4F2D0] shadow-2xl border border-[#FDFBD4] py-10 rounded-2xl">
+    <div className="mt-10 mx-5 lg:mx-10 bg-[#F4F2D0] dark:bg-[#252728] dark:to-[#3a3a3a]  shadow-2xl border border-[#FDFBD4] dark:border-gray-400 py-10 rounded-2xl">
       <h2 className="text-center font-bold text-4xl dark:text-[#FDFBD4]  text-[#305CDE] pb-5 ">
         {" "}
         Explore Article By Category

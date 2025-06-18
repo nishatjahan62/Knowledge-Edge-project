@@ -215,33 +215,8 @@ const Navbar = () => {
                   <li>
                     <a>Settings</a>
                   </li>
-                  <li>
-                    <a>Logout</a>
-                  </li>
-
-                  <li className="pt-2">
-                    <button
-                      onClick={handleLogOut}
-                      className="inline-flex items-center justify-center px-3 py-2 lg:px-5 lg:py-3 text-base font-bold text-center  border border-blue-500 rounded-full shadow-sm cursor-pointer hover:text-white bg-gradient-to-br from-blue-500 via-blue-500 to-blue-500 text-white"
-                    >
-                      <svg
-                        className="w-5 h-5 "
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M13 10V3L4 14h7v7l9-11h-7z"
-                        ></path>
-                      </svg>
-                      <span className="relative font-bold font-[poppins]">
-                        Logout
-                      </span>
-                    </button>
+                  <li  onClick={handleLogOut} className="text-blue-800 font-bold ">
+                    <a className="pr-1 font-bold ">Logout </a><i class="fa-solid fa-right-from-bracket"></i>
                   </li>
                 </ul>
               </div>

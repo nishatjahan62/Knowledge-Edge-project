@@ -3,6 +3,12 @@ import { Link } from "react-router";
 
 const ArticleCard = ({ article }) => {
   const { title, excerpt, publication_date, author_name } = article;
+
+   const newPublicationDate = new Date(publication_date).toLocaleDateString("en-US",{
+    year:"numeric",
+    month:"long",
+    day:"numeric"
+})
   return (
     <div className="mx-auto w-full max-w-md">
       <div className="card bg-[#FDFBD4] dark:bg-[#252728] h-70 overflow-hidden rounded-2xl">
@@ -17,7 +23,7 @@ const ArticleCard = ({ article }) => {
           <p className="text-sm mt-2">{excerpt}</p>
           <div className="card-actions justify-end">
             <button className="py-2 px-3 shadow-2xl bg-blue-400 rounded-2xl text-black font-bold">
-              {publication_date}
+              {newPublicationDate}
             </button>
           </div>
           <Link to={`/article/${article._id}`}>
