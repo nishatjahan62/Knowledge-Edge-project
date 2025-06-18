@@ -11,6 +11,9 @@ import Register from "../Pages/Register/Register";
 import ErrorLayout from "../Layouts/ErrorLayout";
 import CategoryPage from "../Components/Hero/CategoryPage";
 import ArticleDetails from "../Pages/articleDetails/ArticleDetails";
+import PrivateRoute from "../Provider/PrivateRoute";
+import PostArticles from "../Pages/PostArticles/PostArticles";
+import MyArticles from "../Pages/MyArticles/MyArticles";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -39,8 +42,30 @@ export const router = createBrowserRouter([
       },
       {
         path: "article/:id",
-        element: <ArticleDetails></ArticleDetails>,
-        loader: ({ params }) =>fetch(`http://localhost:5000/articles/${params.id}`),
+        element: (
+          <PrivateRoute>
+            {" "}
+            <ArticleDetails></ArticleDetails>
+          </PrivateRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/articles/${params.id}`),
+      },
+      {
+        path: "post-articles",
+        element: (
+          <PrivateRoute>
+            <PostArticles></PostArticles>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "my-posted-articles",
+        element: (
+          <PrivateRoute>
+        <MyArticles></MyArticles>
+          </PrivateRoute>
+        ),
       },
     ],
   },

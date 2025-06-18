@@ -86,7 +86,30 @@ const Navbar = () => {
             {" "}
             About us
           </NavLink>
-        </li>
+           </li>
+           <li> {user &&  <NavLink
+            to="/post-articles"
+            className={({ isActive }) =>
+              isActive
+                ? " border-b-3 pb-1 text-blue-700 font-bold"
+                : "hover:border  hover:border-none hover:rounded-2xl  hover:bg-blue-100 dark:hover:bg-gray-700 px-2 py-0.5"
+            }
+          >
+            {" "}
+          Post Articles
+          </NavLink>}</li>
+          <li> {user &&  <NavLink
+            to="/my-posted-articles"
+            className={({ isActive }) =>
+              isActive
+                ? " border-b-3 pb-1 text-blue-700 font-bold"
+                : "hover:border  hover:border-none hover:rounded-2xl  hover:bg-blue-100 dark:hover:bg-gray-700 px-2 py-0.5"
+            }
+          >
+            {" "}
+          My Articles
+          </NavLink>}</li>
+       
       </ul>
     </>
   );
@@ -206,17 +229,17 @@ const Navbar = () => {
                   tabIndex={0}
                   className="menu menu-sm dropdown-content bg-base-100 rounded-lg z-1 mt-3 w-36 p-3 shadow"
                 >
-                  <li>
-                    <a className="justify-between">
-                      Profile
-                      <span className="badge">New</span>
-                    </a>
+                
+                
+                  <li className="font-medium">
+               <Link to={"/post-articles"}>Post Articles</Link>
                   </li>
-                  <li>
-                    <a>Settings</a>
+                  
+                  <li className="font-medium">
+               <Link to={"/my-posted-articles"}>My Articles</Link>
                   </li>
                   <li  onClick={handleLogOut} className="text-blue-800 font-bold ">
-                    <a className="pr-1 font-bold ">Logout </a><i class="fa-solid fa-right-from-bracket"></i>
+                    <a className="pr-1 font-bold ">Logout <span><i class="fa-solid fa-right-from-bracket"></i></span> </a>
                   </li>
                 </ul>
               </div>
