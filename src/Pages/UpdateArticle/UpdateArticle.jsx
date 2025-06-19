@@ -1,42 +1,44 @@
 import React from "react";
 import AuthHook from "../../Hooks/AuthHook";
+import { useLoaderData } from "react-router";
 import axios from "axios";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
-const PostArticles = () => {
+const UpdateArticle = () => {
   const { user } = AuthHook();
-  const handlePostArticles = (e) => {
+  const articles = useLoaderData();
+  const HandleUpdate = (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
-
-    const { ...restArticles } = data;
-    restArticles.tags = restArticles.tags.split(",").map((res) => res.trim());
-
-    // add new article in database
     axios
-      .post("http://localhost:5000/articles", restArticles)
+      .put(
+        `http://localhost:5000/update-article/${articles._id}`,
+        data
+      )
       .then((res) => {
-        if (res.data.insertedId) {
+        if (res.data.modifiedCount > 0) {
           Swal.fire({
             position: "top",
-            title: "Posted!",
-            text: "You have successfully  posted  this Article. ",
+            title: "Updated!",
+            text: "You have successfully  Updated  your Article. ",
             icon: "success",
             showConfirmButton: false,
             timer: 1500,
           });
+        } else {
+          toast.error("No changes detected");
         }
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
   return (
     <div>
-      <form onSubmit={handlePostArticles}>
+      <form onSubmit={HandleUpdate}>
         <fieldset className="fieldset bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a]  border-base-300 rounded-box  w-sm sm:w-md lg:w-2xl border p-4 mt-15 mx-auto">
           <h2 className="font-[poppins] text-center pt-4 text-2xl lg:text-4xl font-bold text-blue-700 dark:text-blue-400">
             Post Article here
@@ -46,6 +48,7 @@ const PostArticles = () => {
             name="title"
             type="text"
             className="input w-full"
+            defaultValue={articles.title}
             placeholder="Title"
           />
 
@@ -53,19 +56,21 @@ const PostArticles = () => {
           <textarea
             name="content"
             className="textarea w-full"
+            defaultValue={articles.content}
             placeholder="Content"
           ></textarea>
           <label className="label">tags</label>
           <textarea
             name="tags"
             className="textarea w-full"
+            defaultValue={articles.tags}
             placeholder="tags(coma separated)"
           ></textarea>
 
           <label className="label">Categories</label>
           <select
             name="category"
-            defaultValue="Select category"
+            defaultValue={articles.category}
             className="select w-full"
           >
             <option disabled={true}>Select category</option>
@@ -83,6 +88,7 @@ const PostArticles = () => {
             name="author_photo"
             type="url"
             className="input w-full"
+            defaultValue={articles.author_photo}
             placeholder="Photo url"
           />
           <label className="label">Author Name</label>
@@ -91,7 +97,7 @@ const PostArticles = () => {
             type="text"
             className="input w-full"
             placeholder="user's Name"
-            value={user.displayName}
+            defaultValue={user.displayName}
             readOnly
           />
           <label className="label">Author Email</label>
@@ -100,15 +106,20 @@ const PostArticles = () => {
             type="text"
             className="input w-full"
             placeholder="user's email"
-            value={user.email}
+            defaultValue={user.email}
             readOnly
           />
           <label className="label">Date</label>
-          <input name="publication_date" type="date" className="input w-full" />
+          <input
+            name="publication_date"
+            type="date"
+            defaultValue={articles.publication_date}
+            className="input w-full"
+          />
           <button type="submit" className=" w-1/2 mt-3 mx-auto cursor-pointer">
             <div class="relative rounded py-2 overflow-hidden group bg-blue-500  hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300">
               <span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
-              <span class="relative text-xl font-bold">Post Article</span>
+              <span class="relative text-xl font-bold">Update Article</span>
             </div>
           </button>
         </fieldset>
@@ -117,4 +128,4 @@ const PostArticles = () => {
   );
 };
 
-export default PostArticles;
+export default UpdateArticle;

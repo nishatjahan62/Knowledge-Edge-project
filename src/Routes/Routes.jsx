@@ -14,6 +14,7 @@ import ArticleDetails from "../Pages/articleDetails/ArticleDetails";
 import PrivateRoute from "../Provider/PrivateRoute";
 import PostArticles from "../Pages/PostArticles/PostArticles";
 import MyArticles from "../Pages/MyArticles/MyArticles";
+import UpdateArticle from "../Pages/UpdateArticle/UpdateArticle";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -63,9 +64,19 @@ export const router = createBrowserRouter([
         path: "my-posted-articles",
         element: (
           <PrivateRoute>
-        <MyArticles></MyArticles>
+            <MyArticles></MyArticles>
           </PrivateRoute>
         ),
+      },
+      {
+        path: "update-article/:id",
+        element: (
+          <PrivateRoute>
+            <UpdateArticle></UpdateArticle>
+          </PrivateRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/articles/${params.id}`),
       },
     ],
   },

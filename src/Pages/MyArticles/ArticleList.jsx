@@ -7,7 +7,7 @@ import { DeleteArticleById } from "../../services/DeleteArticleApi";
 const ArticleList = ({ ArticlePostedPromise }) => {
   const articles = use(ArticlePostedPromise);
   const [article, setArticle] = useState(articles);
-
+// Delete button functionality:
   const handleDelete = (id) => {
     Swal.fire({
       title: "Want to Delete?",
@@ -38,7 +38,7 @@ const ArticleList = ({ ArticlePostedPromise }) => {
     <div>
       <div>
         <h2 className="text-3xl font-bold text-center pb-5">
-          <span>{articles.length > 1 ? "Articles" : "Article"}</span> added my
+          <span>{articles.length > 1 ? "Articles" : "Article"}</span> added by
           me: {articles.length}
         </h2>
         <div className="overflow-x-auto bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a] rounded-2xl px-5 items-center">
@@ -55,7 +55,7 @@ const ArticleList = ({ ArticlePostedPromise }) => {
             </thead>
             <tbody>
               {articles.map((article, index) => (
-                <tr>
+                <tr key={article._id}>
                   <th>{index + 1}</th>
                   <td className="lg:text-lg font-medium"> {article.title}</td>
                   <td className="lg:text-lg font-medium">
@@ -74,7 +74,7 @@ const ArticleList = ({ ArticlePostedPromise }) => {
                       <i class="fa-solid fa-trash"></i>
                     </button>{" "}
                     /
-                    <Link to={`/update-tip/${article._id}`}>
+                    <Link to={`/update-article/${article._id}`}>
                       {" "}
                       <button className="cursor-pointer pl-1">
                         {" "}
