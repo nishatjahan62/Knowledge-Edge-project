@@ -6,7 +6,7 @@ const Faq = () => {
       <div className="bg-[#FDFBD4]  dark:bg-[#252728] dark:to-[#3a3a3a] px-5 py-10 rounded-3xl space-y-3 shadow-2xl">
         <div>
           <h2 className="text-center pb-5 font-bold text-3xl font-[poppins] text-[#305CDE] dark:text-[#f3f1d3] ">
-            Here’s What Others Wondered Toos
+            Here’s What Others Wondered Too
           </h2>
         </div>
         {/* Question-01 */}
@@ -52,7 +52,7 @@ const Faq = () => {
             <div className="flex items-center gap-2">
               <img className="w-5 pt-1" src="/question.png" alt="" />{" "}
               <p className="font-semibold">
-                How do I create an account?
+              How can I Post an article?
               </p>
             </div>
           </div>
@@ -62,8 +62,7 @@ const Faq = () => {
            ">
             <div className="pt-3">
               <i class="fa-solid fa-calendar-check pr-2"></i>
-              Click the "Login" button in the top right corner and follow the
-              registration process.
+            You can submit an article by logging into your account and clicking on the "Post Article" button in the dashboard. Fill out the required fields and hit publish!
             </div>
           </div>
         </div>
@@ -81,7 +80,7 @@ const Faq = () => {
             <div className="flex items-center gap-2">
               <img className="w-5 pt-1" src="/question.png" alt="" />{" "}
               <p className="font-semibold">
-                How do I create an account?
+                Who can write articles on this platform?
               </p>
             </div>
           </div>
@@ -91,8 +90,7 @@ const Faq = () => {
            ">
             <div className="pt-3">
               <i class="fa-solid fa-calendar-check pr-2"></i>
-              Click the "Login" button in the top right corner and follow the
-              registration process.
+             Anyone with a registered account can write and share articles. Whether you're a student, a professional, or a curious writer — your voice is welcome here.
             </div>
           </div>
         </div>
@@ -110,7 +108,7 @@ const Faq = () => {
             <div className="flex items-center gap-2">
               <img className="w-5 pt-1" src="/question.png" alt="" />{" "}
               <p className="font-semibold">
-                How do I create an account?
+                Is my personal information safe
               </p>
             </div>
           </div>
@@ -120,8 +118,7 @@ const Faq = () => {
            ">
             <div className="pt-3">
               <i class="fa-solid fa-calendar-check pr-2"></i>
-              Click the "Login" button in the top right corner and follow the
-              registration process.
+              Yes, we prioritize your privacy. Your data is stored securely and never shared with third parties.
             </div>
           </div>
         </div>
@@ -139,7 +136,7 @@ const Faq = () => {
             <div className="flex items-center gap-2">
               <img className="w-5 pt-1" src="/question.png" alt="" />{" "}
               <p className="font-semibold">
-                How do I create an account?
+                Is there a way to follow my favorite authors
               </p>
             </div>
           </div>
@@ -149,8 +146,7 @@ const Faq = () => {
            ">
             <div className="pt-3">
               <i class="fa-solid fa-calendar-check pr-2"></i>
-              Click the "Login" button in the top right corner and follow the
-              registration process.
+            We’re working on it! Stay tuned for updates where you’ll be able to follow authors and get notified about their new posts.
             </div>
           </div>
         </div>
