@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router";
+import AuthHook from "../../Hooks/AuthHook";
 
 const Footer = () => {
+  const {user}=AuthHook()
   return (
     <div>
       <footer
@@ -12,13 +14,21 @@ const Footer = () => {
           className="flex lg:flex-row flex-col lg:items-center justify-around lg:gap-10 p-2
          pt-5"
         >
+          
           <div className="">
+           
             <ul className="space-y-1.5">
+             
               <li>
-                <h6 className="font-semibold text-xl font-[quicksand] ">
-                  Explore
-                </h6>
-                <div className="border-b-2 border-green-500 w-30 py-1"></div>
+               <Link to={"/about-us"}>  <div>
+            <img
+              className="block  dark:hidden w-50 "
+              src={"/Logo&Name.png"}
+              alt=""
+            />
+          <img className="hidden dark:block w-50 " src={"/Logo&NameDark.png"} alt="" />
+          </div></Link>
+               
               </li>
               <li className="link link-hover font-semibold">
                 {" "}
@@ -28,6 +38,11 @@ const Footer = () => {
                 {" "}
                 <Link to="/all-articles">All Articles</Link>
               </li>
+<li className="link link-hover font-semibold">
+  {user && (
+    <Link to="/my-posted-articles">My Posted Articles</Link>
+  )}
+</li>
             </ul>
           </div>
           <ul className="space-y-1.5">

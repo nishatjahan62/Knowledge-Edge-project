@@ -152,17 +152,15 @@ const Navbar = () => {
               {NavLinks}
             </ul>
           </div>
-          <div>
+          <Link to={"/about-us"}><div>
             <img
               className="block  dark:hidden w-50 lg:p-2"
               src={"/Logo&Name.png"}
               alt=""
             />
           <img className="hidden dark:block w-50 p-2" src={"/Logo&NameDark.png"} alt="" />
-          </div>
-         {/* <div>
-          <img className="lg:hidden sm:block block w-10 " src={"/mainLogo.png"} alt="" />
-         </div> */}
+          </div></Link>
+      
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{NavLinks}</ul>
