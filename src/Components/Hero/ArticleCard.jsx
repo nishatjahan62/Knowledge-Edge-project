@@ -2,21 +2,32 @@ import React from "react";
 import { Link } from "react-router";
 
 const ArticleCard = ({ article }) => {
-  const { title, excerpt, publication_date, author_name,content } = article;
+  const {
+    title,
+    excerpt,
+    publication_date,
+    author_name,
+    content,
+    likes,
+    comments,
+  } = article;
 
-   const newPublicationDate = new Date(publication_date).toLocaleDateString("en-US",{
-    year:"numeric",
-    month:"long",
-    day:"numeric"
-})
+  const newPublicationDate = new Date(publication_date).toLocaleDateString(
+    "en-US",
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }
+  );
   return (
     <div className="mx-auto w-full max-w-md">
-      <div className="card bg-[#FDFBD4] dark:bg-[#252728] h-70 overflow-hidden rounded-2xl">
+      <div className="card bg-[#FDFBD4] dark:bg-[#252728] h-90 overflow-hidden rounded-2xl">
         <div className="card-body  ">
           <h2 className="card-title  truncate  font-bold text-xl">{title}</h2>
-          <p className="text-xl pt-2  font-bold">
+          <p className="lg:text-xl text-lg pt-2  font-bold">
             Author:{" "}
-            <span className="text-blue-700 dark:text-blue-400">
+            <span className="text-blue-700 dark:text-blue-400 ">
               {author_name}
             </span>
           </p>
@@ -25,6 +36,10 @@ const ArticleCard = ({ article }) => {
             <button className="py-2 px-3 shadow-2xl bg-blue-400 rounded-2xl text-black font-bold">
               {newPublicationDate}
             </button>
+          </div>
+          <div className="font-semibold ">
+            <p className=""><span className="text-blue-700 pr-1"><i class="fa-solid fa-comment"></i></span>Comments : {comments}</p>
+           <p> <i class="fa-solid fa-thumbs-up text-yellow-400 "></i>  Likes: {likes}</p>
           </div>
           <Link to={`/article/${article._id}`}>
             {" "}
