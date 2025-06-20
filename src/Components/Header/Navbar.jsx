@@ -86,30 +86,39 @@ const Navbar = () => {
             {" "}
             About us
           </NavLink>
-           </li>
-           <li> {user &&  <NavLink
-            to="/post-articles"
-            className={({ isActive }) =>
-              isActive
-                ? " border-b-3 pb-1 text-blue-700 font-bold"
-                : "hover:border  hover:border-none hover:rounded-2xl  hover:bg-blue-100 dark:hover:bg-gray-700 px-2 py-0.5"
-            }
-          >
-            {" "}
-          Post Articles
-          </NavLink>}</li>
-          <li> {user &&  <NavLink
-            to="/my-posted-articles"
-            className={({ isActive }) =>
-              isActive
-                ? " border-b-3 pb-1 text-blue-700 font-bold"
-                : "hover:border  hover:border-none hover:rounded-2xl  hover:bg-blue-100 dark:hover:bg-gray-700 px-2 py-0.5"
-            }
-          >
-            {" "}
-          My Articles
-          </NavLink>}</li>
-       
+        </li>
+        <li>
+          {" "}
+          {user && (
+            <NavLink
+              to="/post-articles"
+              className={({ isActive }) =>
+                isActive
+                  ? " border-b-3 pb-1 text-blue-700 font-bold"
+                  : "hover:border  hover:border-none hover:rounded-2xl  hover:bg-blue-100 dark:hover:bg-gray-700 px-2 py-0.5"
+              }
+            >
+              {" "}
+              Post Articles
+            </NavLink>
+          )}
+        </li>
+        <li>
+          {" "}
+          {user && (
+            <NavLink
+              to="/my-posted-articles"
+              className={({ isActive }) =>
+                isActive
+                  ? " border-b-3 pb-1 text-blue-700 font-bold"
+                  : "hover:border  hover:border-none hover:rounded-2xl  hover:bg-blue-100 dark:hover:bg-gray-700 px-2 py-0.5"
+              }
+            >
+              {" "}
+              My Articles
+            </NavLink>
+          )}
+        </li>
       </ul>
     </>
   );
@@ -143,7 +152,17 @@ const Navbar = () => {
               {NavLinks}
             </ul>
           </div>
-          <a className=" text-xl">daisyUI</a>
+          <div>
+            <img
+              className="block  dark:hidden w-50 lg:p-2"
+              src={"/Logo&Name.png"}
+              alt=""
+            />
+          <img className="hidden dark:block w-50 p-2" src={"/Logo&NameDark.png"} alt="" />
+          </div>
+         {/* <div>
+          <img className="lg:hidden sm:block block w-10 " src={"/mainLogo.png"} alt="" />
+         </div> */}
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{NavLinks}</ul>
@@ -229,17 +248,23 @@ const Navbar = () => {
                   tabIndex={0}
                   className="menu menu-sm dropdown-content bg-base-100 rounded-lg z-1 mt-3 w-36 p-3 shadow"
                 >
-                
-                
                   <li className="font-medium">
-               <Link to={"/post-articles"}>Post Articles</Link>
+                    <Link to={"/post-articles"}>Post Articles</Link>
                   </li>
-                  
+
                   <li className="font-medium">
-               <Link to={"/my-posted-articles"}>My Articles</Link>
+                    <Link to={"/my-posted-articles"}>My Articles</Link>
                   </li>
-                  <li  onClick={handleLogOut} className="text-blue-800 font-bold ">
-                    <a className="pr-1 font-bold ">Logout <span><i class="fa-solid fa-right-from-bracket"></i></span> </a>
+                  <li
+                    onClick={handleLogOut}
+                    className="text-blue-800 font-bold "
+                  >
+                    <a className="pr-1 font-bold ">
+                      Logout{" "}
+                      <span>
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                      </span>{" "}
+                    </a>
                   </li>
                 </ul>
               </div>
