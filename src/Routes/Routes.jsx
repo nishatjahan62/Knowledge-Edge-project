@@ -75,6 +75,7 @@ export const router = createBrowserRouter([
             <UpdateArticle></UpdateArticle>
           </PrivateRoute>
         ),
+        hydrateFallbackElement:<Loading></Loading>,
         loader: ({ params }) =>
           fetch(`http://localhost:5000/articles/${params.id}`),
       },

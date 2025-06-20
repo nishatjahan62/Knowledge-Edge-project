@@ -3,11 +3,17 @@ import toast from "react-hot-toast";
 import { Link } from "react-router";
 import Swal from "sweetalert2";
 import { DeleteArticleById } from "../../services/DeleteArticleApi";
+import UpdateArticle from "../UpdateArticle/UpdateArticle";
 
 const ArticleList = ({ ArticlePostedPromise }) => {
   const articles = use(ArticlePostedPromise);
   const [article, setArticle] = useState(articles);
-// Delete button functionality:
+
+  //For Modal:
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [SelectedArticle, setSelectedArticle] = useState(null);
+
+  // Delete button functionality:
   const handleDelete = (id) => {
     Swal.fire({
       title: "Want to Delete?",
@@ -34,60 +40,81 @@ const ArticleList = ({ ArticlePostedPromise }) => {
       }
     });
   };
+
+  // modal functionality:
+  const handleEdit = (article) => {
+    setSelectedArticle(article);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedArticle(null);
+  };
+
   return (
     <div>
-      <div>
-        <h2 className="text-3xl font-bold text-center pb-5">
-          <span>{articles.length > 1 ? "Articles" : "Article"}</span> added by
-          me: {articles.length}
-        </h2>
-        <div className="overflow-x-auto bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a] rounded-2xl px-5 items-center">
-          <table className="table">
-            {/* head */}
-            <thead>
-              <tr className="">
-                <th className="font-bold">#</th>
-                <th className="font-bold">articles</th>
-                <th className="font-bold">category</th>
-                <th className="font-bold">publication date</th>{" "}
-                <th className="font-bold">delete/edit</th>
+      <h2 className="text-3xl font-bold text-center pb-5">
+        <span>{articles.length > 1 ? "Articles" : "Article"}</span> added by me:{" "}
+        {articles.length}
+      </h2>
+      <div className="overflow-x-auto bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a] rounded-2xl px-5 items-center">
+        <table className="table">
+          <thead>
+            <tr>
+              <th className="font-bold">#</th>
+              <th className="font-bold">articles</th>
+              <th className="font-bold">category</th>
+              <th className="font-bold">publication date</th>{" "}
+              <th className="font-bold">delete/edit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {articles.map((art, index) => (
+              <tr key={art._id}>
+                <th>{index + 1}</th>
+                <td className="lg:text-lg font-medium"> {art.title}</td>
+                <td className="lg:text-lg font-medium"> {art.category}</td>
+                <td className="lg:text-lg font-medium">
+                  {art.publication_date}
+                </td>
+                <td className="flex items-center justify-center">
+                  <button
+                    onClick={() => handleDelete(art._id)}
+                    className="cursor-pointer "
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                  /
+                  <button
+                    onClick={() => handleEdit(art)}
+                    className="cursor-pointer pl-1"
+                  >
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {articles.map((article, index) => (
-                <tr key={article._id}>
-                  <th>{index + 1}</th>
-                  <td className="lg:text-lg font-medium"> {article.title}</td>
-                  <td className="lg:text-lg font-medium">
-                    {" "}
-                    {article.category}
-                  </td>
-                  <td className="lg:text-lg font-medium">
-                    {article.publication_date}
-                  </td>
-                  <td className="flex items-center justify-center">
-                    {" "}
-                    <button
-                      onClick={() => handleDelete(article._id)}
-                      className="cursor-pointer "
-                    >
-                      <i class="fa-solid fa-trash"></i>
-                    </button>{" "}
-                    /
-                    <Link to={`/update-article/${article._id}`}>
-                      {" "}
-                      <button className="cursor-pointer pl-1">
-                        {" "}
-                        <i class="fa-solid fa-pen-to-square"></i>
-                      </button>
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="  bg-opacity-50 flex items-center justify-center ">
+          <div className="bg-white rounded-2xl px-10 relative pb-10 -top-80">
+            <button
+              onClick={closeModal}
+              className="absolute top-5 right-10 text-red-600 font-bold text-xl "
+            >
+            Close 
+            </button>
+            <UpdateArticle
+              article={SelectedArticle}
+              onClose={closeModal}
+            ></UpdateArticle>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

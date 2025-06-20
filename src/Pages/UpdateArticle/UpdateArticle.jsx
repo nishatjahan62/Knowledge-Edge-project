@@ -1,23 +1,23 @@
 import React from "react";
 import AuthHook from "../../Hooks/AuthHook";
-import { useLoaderData } from "react-router";
+
 import axios from "axios";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 
-const UpdateArticle = () => {
+const UpdateArticle = ({ article, onclose }) => {
   const { user } = AuthHook();
-  const articles = useLoaderData();
   const HandleUpdate = (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
+    if (data.tags) {
+      data.tags = data.tags.split(",").map((tag) => tag.trim());
+    }
+    console.log(article);
     axios
-      .put(
-        `http://localhost:5000/update-article/${articles._id}`,
-        data
-      )
+      .put(`http://localhost:5000/update-article/${article._id}`, data)
       .then((res) => {
         if (res.data.modifiedCount > 0) {
           Swal.fire({
@@ -28,6 +28,7 @@ const UpdateArticle = () => {
             showConfirmButton: false,
             timer: 1500,
           });
+          onclose();
         } else {
           toast.error("No changes detected");
         }
@@ -41,14 +42,14 @@ const UpdateArticle = () => {
       <form onSubmit={HandleUpdate}>
         <fieldset className="fieldset bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a]  border-base-300 rounded-box  w-sm sm:w-md lg:w-2xl border p-4 mt-15 mx-auto">
           <h2 className="font-[poppins] text-center pt-4 text-2xl lg:text-4xl font-bold text-blue-700 dark:text-blue-400">
-            Post Article here
+            Update your Article here
           </h2>
           <label className="label">Title</label>
           <input
             name="title"
             type="text"
             className="input w-full"
-            defaultValue={articles.title}
+            defaultValue={article.title}
             placeholder="Title"
           />
 
@@ -56,21 +57,21 @@ const UpdateArticle = () => {
           <textarea
             name="content"
             className="textarea w-full"
-            defaultValue={articles.content}
+            defaultValue={article.content}
             placeholder="Content"
           ></textarea>
           <label className="label">tags</label>
           <textarea
             name="tags"
             className="textarea w-full"
-            defaultValue={articles.tags}
+            defaultValue={article.tags}
             placeholder="tags(coma separated)"
           ></textarea>
 
           <label className="label">Categories</label>
           <select
             name="category"
-            defaultValue={articles.category}
+            defaultValue={article.category}
             className="select w-full"
           >
             <option disabled={true}>Select category</option>
@@ -88,7 +89,7 @@ const UpdateArticle = () => {
             name="author_photo"
             type="url"
             className="input w-full"
-            defaultValue={articles.author_photo}
+            defaultValue={article.author_photo}
             placeholder="Photo url"
           />
           <label className="label">Author Name</label>
@@ -113,7 +114,7 @@ const UpdateArticle = () => {
           <input
             name="publication_date"
             type="date"
-            defaultValue={articles.publication_date}
+            defaultValue={article.publication_date}
             className="input w-full"
           />
           <button type="submit" className=" w-1/2 mt-3 mx-auto cursor-pointer">
