@@ -70,7 +70,7 @@ const ArticleList = ({ ArticlePostedPromise }) => {
             </tr>
           </thead>
           <tbody>
-            {articles.map((art, index) => (
+            {article.map((art, index) => (
               <tr key={art._id}>
                 <th>{index + 1}</th>
                 <td className="lg:text-lg font-medium"> {art.title}</td>
@@ -111,6 +111,11 @@ const ArticleList = ({ ArticlePostedPromise }) => {
             <UpdateArticle
               article={SelectedArticle}
               onClose={closeModal}
+              onUpdate={(updateArticle)=>{
+                const updatedList = article.map((art)=>art._id === updateArticle._id?updateArticle:art)
+                setArticle(updatedList)
+                closeModal()
+              }}
             ></UpdateArticle>
           </div>
         </div>

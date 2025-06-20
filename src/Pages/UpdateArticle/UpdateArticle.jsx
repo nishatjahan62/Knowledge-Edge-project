@@ -5,7 +5,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 
-const UpdateArticle = ({ article, onclose }) => {
+const UpdateArticle = ({ article, onUpdate }) => {
   const { user } = AuthHook();
   const HandleUpdate = (e) => {
     e.preventDefault();
@@ -28,7 +28,8 @@ const UpdateArticle = ({ article, onclose }) => {
             showConfirmButton: false,
             timer: 1500,
           });
-          onclose();
+          const updateArticle = { ...article, ...data };
+          onUpdate(updateArticle);
         } else {
           toast.error("No changes detected");
         }

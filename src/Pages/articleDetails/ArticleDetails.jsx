@@ -1,6 +1,8 @@
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLoaderData } from "react-router";
+import AuthHook from "../../Hooks/AuthHook";
+import axios from "axios";
+
 
 const ArticleDetails = () => {
   const {
@@ -11,69 +13,156 @@ const ArticleDetails = () => {
     tags,
     author_name,
     author_photo,
+    _id,
   } = useLoaderData();
 
-//   Format publication date:
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
+  const { user } = AuthHook();
 
- const newPublicationDate = new Date(publication_date).toLocaleDateString("en-US",{
-    year:"numeric",
-    month:"long",
-    day:"numeric"
-}
-)
+  //   Format publication date:
+
+  const newPublicationDate = new Date(publication_date).toLocaleDateString(
+    "en-US",
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }
+  );
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/articles/${_id}/comments`)
+      .then((res) => {
+        setComments(res.data)
+      })
+      .catch((err) => console.log(err));
+  });
+  // comments handle :
+  const handleComment = (e) => {
+    e.preventDefault();
+    if (!user) return;
+
+    const commentData = {
+      user_name: user.displayName,
+      user_photo: user.photoURL,
+      comment: newComment,
+    };
+
+    const res = axios.post(
+      `http://localhost:5000/articles/${_id}/comments`,
+      commentData
+    );
+    if (res.data.insertedId) {
+      setComments((prev) => [
+        {
+          ...commentData,
+          created_at: new Date().toISOString(),
+        },
+        ...prev,
+      ]);
+      setNewComment("");
+    }
+  };
 
   return (
-    <div className="mt-10 mx-8 lg:mx-15 bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a] rounded-2xl ">
-      <div className="hero ">
-        <div className="hero-content ">
-          <div className="max-w-md">
-            <h1 className="text-2xl lg:text-4xl font-bold pt-5 text-center">
-              {title}
-            </h1>
-            <p className=" text-center text-sm pt-2 font-bold text-blue-800 dark:text-blue-400">
-              <span className="text-black dark:text-white pr-1">
-                Published on :{" "}
-              </span>{" "}
-              {newPublicationDate}
-            </p>
-            <p className="py-6 text-center">{content}</p>
-
-            <div className="text-left px-5">
-              <p className="text-blue-700 dark:text-blue-400 text-lg font-semibold pb-3">
-                {" "}
-                category :{" "}
-                <span className="font-medium text-black dark:text-white pl-2 ">
-                  {category}
-                </span>
+    <div className="mt-10 mx-8 lg:mx-15 ">
+      <div className="bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a] rounded-2xl">
+        <div className="hero ">
+          <div className="hero-content ">
+            <div className="max-w-md">
+              <h1 className="text-2xl lg:text-4xl font-bold pt-5 text-center">
+                {title}
+              </h1>
+              <p className=" text-center text-sm pt-2 font-bold text-blue-800 dark:text-blue-400">
+                <span className="text-black dark:text-white pr-1">
+                  Published on :{" "}
+                </span>{" "}
+                {newPublicationDate}
               </p>
-              <h2 className="text-lg font-semibold mb-2 text-blue-800 dark:text-blue-400">
-                Tags :
-              </h2>
-              <ul className=" list-disc list-inside ml-10  space-y-2  ">
-                {tags &&
-                  tags.map((tag, index) => (
-                    <li key={index} className="font-medium ">
-                      {tag}
-                    </li>
-                  ))}
-              </ul>
+              <p className="py-6 text-center">{content}</p>
+
+              <div className="text-left px-5">
+                <p className="text-blue-700 dark:text-blue-400 text-lg font-semibold pb-3">
+                  {" "}
+                  category :{" "}
+                  <span className="font-medium text-black dark:text-white pl-2 ">
+                    {category}
+                  </span>
+                </p>
+                <h2 className="text-lg font-semibold mb-2 text-blue-800 dark:text-blue-400">
+                  Tags :
+                </h2>
+                <ul className=" list-disc list-inside ml-10  space-y-2  ">
+                  {tags &&
+                    tags.map((tag, index) => (
+                      <li key={index} className="font-medium ">
+                        {tag}
+                      </li>
+                    ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <hr className="text-blue-800 dark:text-blue-400" />
-      <div className="text-center   gap-2  mt-5">
-        {" "}
-        <div className="avatar ">
-          <div className="w-22 rounded-full ">
-            <img alt="Tailwind CSS Navbar component" src={author_photo} />
+        <hr className="text-blue-800 dark:text-blue-400" />
+        <div className="text-center   gap-2  mt-5">
+          {" "}
+          <div className="avatar ">
+            <div className="w-22 rounded-full ">
+              <img alt="Tailwind CSS Navbar component" src={author_photo} />
+            </div>
+          </div>
+          <div>
+            <p className="font-bold">Author</p>
+            <p className="pb-5 text-lg font-semibold">{author_name}</p>
           </div>
         </div>
-        <div>
-            <p className="font-bold">Author</p>
-          <p className="pb-5 text-lg font-semibold">{author_name}</p>
-        </div>
       </div>
+      {/* comment */}
+      {user && (
+        <div className="mt-5  bg-[#FDFBD4] dark:bg-[#3a3a3a] p-5 rounded-2xl">
+          <form className=" " onSubmit={handleComment}>
+        <textarea
+              name="content"
+              className="textarea w-full rounded-2xl flex  lg:max-w-2xl sm:max-w-lg min-w-xs mx-auto"
+              placeholder="Write your comment"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              required
+            ></textarea>
+           <div> <button type="submit" className=" flex justify-center mx-auto mt-5">
+              <div class="relative rounded py-2 px-4 overflow-hidden group bg-blue-500  hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300">
+                <span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+                <span class="relative text-xl font-bold">Submit comment</span>
+              </div>
+            </button></div>
+          </form>
+        </div>
+      )}
+
+      {/* show comments */}
+      <div className="bg-white  rounded-2xl p-5 mt-5 dark:bg-[#3a3a3a]"> <h3 className="text-left px-5 text-2xl font-bold pb-3 text-blue-600 dark:text-blue-400">Comments by reader : {comments.length}</h3>
+      
+        {comments.map((comment, index) => (
+           <div>
+          <div key={index} className="bg-[#FDFBD4] dark:bg-[#1D232A] rounded-2xl px-5 py-3">
+           
+            <div className="flex items-center gap-5">
+              <div>  <img className="lg:w-10 w-8 rounded-full" src={comment.user_photo} alt="" />
+              <p>{comment && comment.user_name?.split(" ")[0]||""}
+              </p>
+              </div>
+              <div><p className="text-lg font-semibold">{comment.comment}</p>
+           
+            <p>{new Date(comment.created_at).toLocaleString()}</p></div>
+            </div>
+                </div> 
+          </div>
+        ))}
+      </div>
+      
     </div>
   );
 };
