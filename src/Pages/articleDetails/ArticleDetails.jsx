@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLoaderData } from "react-router";
 import AuthHook from "../../Hooks/AuthHook";
 import axios from "axios";
-
+import toast from "react-hot-toast";
 
 const ArticleDetails = () => {
   const {
@@ -16,9 +16,21 @@ const ArticleDetails = () => {
     _id,
   } = useLoaderData();
 
+  const safeTags = Array.isArray(tags)
+    ? tags
+    : typeof tags === "string"
+    ? tags.split(",").map((tag) => tag.trim())
+    : [];
+
+  const { user } = AuthHook();
+
+  // comments
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const { user } = AuthHook();
+
+  // likes
+  const [likes, setLikes] = useState(0);
+  const [liked, setLiked] = useState(false);
 
   //   Format publication date:
 
@@ -32,14 +44,34 @@ const ArticleDetails = () => {
   );
 
   useEffect(() => {
+    // fetch comments
     axios
       .get(`http://localhost:5000/articles/${_id}/comments`)
       .then((res) => {
-        setComments(res.data)
+        setComments(res.data);
       })
       .catch((err) => console.log(err));
-  });
-  // comments handle :
+
+    // fetch likes
+    axios
+      .get(`http://localhost:5000/articles/${_id}/likes`)
+      .then((res) => {
+        setLikes(res.data);
+      })
+      .catch((err) => console.log(err));
+
+    if (user) {
+      axios.get("http://localhost:5000/all-articles").then((res) => {
+        const articles = res.data.find((ar) => ar._id === _id);
+        if (articles?.likes?.includes(user.email)) {
+          setLiked(true);
+        }
+      });
+    }
+  }, [_id, user]);
+
+  // comments handle =>
+
   const handleComment = (e) => {
     e.preventDefault();
     if (!user) return;
@@ -64,6 +96,25 @@ const ArticleDetails = () => {
       ]);
       setNewComment("");
     }
+  };
+
+  // handle likes =>
+
+  const handleLike = () => {
+    axios
+      .post(`http://localhost:5000/articles/${_id}/like`, {
+        user_email: user.email,
+      })
+      .then((res) => {
+        if (res.data.alreadyLiked) {
+          toast.error("You already liked this article");
+        } else {
+          toast.success("Thanks fot Liking!");
+          setLiked(true);
+          setLikes(res.data.likeCount);
+        }
+      })
+      .catch(console.error);
   };
 
   return (
@@ -95,14 +146,29 @@ const ArticleDetails = () => {
                   Tags :
                 </h2>
                 <ul className=" list-disc list-inside ml-10  space-y-2  ">
-                  {tags &&
-                    tags.map((tag, index) => (
+                  {safeTags &&
+                    safeTags.map((tag, index) => (
                       <li key={index} className="font-medium ">
                         {tag}
                       </li>
                     ))}
                 </ul>
               </div>
+              {user && (
+                <div>
+                  <button
+                    onClick={handleLike}
+                    className="flex justify-center items-center mx-auto mt-3 gap-2"
+                  >
+                    <i class="fa-solid fa-thumbs-up text-yellow-400 cursor-pointer"></i>
+                    {liked ? "liked" : "like"}
+                  </button>
+                  <p className="text-center  pt-2">
+                    Total likes : (
+                    {typeof likes === "object" ? likes.likeCount : likes})
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -124,7 +190,7 @@ const ArticleDetails = () => {
       {user && (
         <div className="mt-5  bg-[#FDFBD4] dark:bg-[#3a3a3a] p-5 rounded-2xl">
           <form className=" " onSubmit={handleComment}>
-        <textarea
+            <textarea
               name="content"
               className="textarea w-full rounded-2xl flex  lg:max-w-2xl sm:max-w-lg min-w-xs mx-auto"
               placeholder="Write your comment"
@@ -132,37 +198,54 @@ const ArticleDetails = () => {
               onChange={(e) => setNewComment(e.target.value)}
               required
             ></textarea>
-           <div> <button type="submit" className=" flex justify-center mx-auto mt-5">
-              <div class="relative rounded py-2 px-4 overflow-hidden group bg-blue-500  hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300">
-                <span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
-                <span class="relative text-xl font-bold">Submit comment</span>
-              </div>
-            </button></div>
+            <div>
+              {" "}
+              <button
+                type="submit"
+                className=" flex justify-center mx-auto mt-5"
+              >
+                <div class="relative rounded py-2 px-4 overflow-hidden group bg-blue-500  hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300">
+                  <span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+                  <span class="relative text-xl font-bold">Submit comment</span>
+                </div>
+              </button>
+            </div>
           </form>
         </div>
       )}
 
       {/* show comments */}
-      <div className="bg-white  rounded-2xl p-5 mt-5 dark:bg-[#3a3a3a]"> <h3 className="text-left px-5 text-2xl font-bold pb-3 text-blue-600 dark:text-blue-400">Comments by reader : {comments.length}</h3>
-      
+      <div className="bg-white  rounded-2xl p-5 mt-5 dark:bg-[#3a3a3a]">
+        {" "}
+        <h3 className="text-left px-5 text-2xl font-bold pb-3 text-blue-600 dark:text-blue-400">
+          Comments by reader : {comments.length}
+        </h3>
         {comments.map((comment, index) => (
-           <div>
-          <div key={index} className="bg-[#FDFBD4] dark:bg-[#1D232A] rounded-2xl px-5 py-3">
-           
-            <div className="flex items-center gap-5">
-              <div>  <img className="lg:w-10 w-8 rounded-full" src={comment.user_photo} alt="" />
-              <p>{comment && comment.user_name?.split(" ")[0]||""}
-              </p>
+          <div>
+            <div
+              key={index}
+              className="bg-[#FDFBD4] dark:bg-[#1D232A] rounded-2xl px-5 py-3"
+            >
+              <div className="flex items-center gap-5">
+                <div>
+                  {" "}
+                  <img
+                    className="lg:w-10 w-8 rounded-full"
+                    src={comment.user_photo}
+                    alt=""
+                  />
+                  <p>{(comment && comment.user_name?.split(" ")[0]) || ""}</p>
+                </div>
+                <div>
+                  <p className="text-lg font-semibold">{comment.comment}</p>
+
+                  <p>{new Date(comment.created_at).toLocaleString()}</p>
+                </div>
               </div>
-              <div><p className="text-lg font-semibold">{comment.comment}</p>
-           
-            <p>{new Date(comment.created_at).toLocaleString()}</p></div>
             </div>
-                </div> 
           </div>
         ))}
       </div>
-      
     </div>
   );
 };

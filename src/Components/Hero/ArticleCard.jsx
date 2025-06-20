@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router";
 
 const ArticleCard = ({ article }) => {
-  const { title, excerpt, publication_date, author_name } = article;
+  const { title, excerpt, publication_date, author_name,content } = article;
 
    const newPublicationDate = new Date(publication_date).toLocaleDateString("en-US",{
     year:"numeric",
@@ -20,7 +20,7 @@ const ArticleCard = ({ article }) => {
               {author_name}
             </span>
           </p>
-          <p className="text-sm mt-2">{excerpt}</p>
+          <p className="text-sm mt-2">{excerpt?.excerpt || content}</p>
           <div className="card-actions justify-end">
             <button className="py-2 px-3 shadow-2xl bg-blue-400 rounded-2xl text-black font-bold">
               {newPublicationDate}
