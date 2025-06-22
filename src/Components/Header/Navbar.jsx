@@ -124,8 +124,8 @@ const Navbar = () => {
   );
 
   return (
-    <div className="flex justify-center ">
-      <div className="navbar mt-5 mx-12 lg:mx-20  w-full   bg-[#FDFBD4] rounded-full shadow-xl border border-blue-600 dark:bg-[#252728]">
+    <div className=" fixed z-50 top-0 left-0 w-full  flex justify-center mx-auto">
+      <div className="navbar mt-5 px-2 lg:px-5 sm:px-3 mx-12 lg:mx-20  w-[90%]   bg-[#FDFBD4] rounded-full shadow-xl border border-blue-600 dark:bg-[#252728]">
         <div className="navbar-start ">
           <div className="dropdown cursor-pointer">
             <div tabIndex={0} role="button" className="px-2 lg:hidden">

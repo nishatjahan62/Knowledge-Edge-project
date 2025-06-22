@@ -17,7 +17,7 @@ const ArticleList = ({ ArticlePostedPromise }) => {
   const handleDelete = (id) => {
     Swal.fire({
       title: "Want to Delete?",
-      text: "Are you sure you want you want to delete this Article? ",
+      text: "Are you sure you want to delete this Article? ",
       icon: "warning",
       draggable: true,
       showCancelButton: true,
@@ -53,8 +53,8 @@ const ArticleList = ({ ArticlePostedPromise }) => {
   };
 
   return (
-    <div>
-      <h2 className="text-3xl font-bold text-center pb-5">
+    <div className="max-h-screen">
+      <h2 className="text-3xl    pt-10  font-bold text-center pb-5">
         <span>{articles.length > 1 ? "Articles" : "Article"}</span> added by me:{" "}
         {articles.length}
       </h2>

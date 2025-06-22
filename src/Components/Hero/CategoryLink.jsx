@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CategoryPage from "./CategoryPage";
 import { Link } from "react-router";
+import { Tooltip } from "react-tooltip";
 
 const CategoryLink = () => {
   const [categories, setCategories] = useState([]);
@@ -26,6 +27,8 @@ const CategoryLink = () => {
         {categories.map((category) => (
           <Link key={category} to={`/article-by-category/${category}`}>
             <button
+            data-tooltip-id="category"
+            data-tooltip-content={`click to explore ${category} article`}
               href="#_"
               class="relative px-5 py-2 font-medium text-white group"
             >
@@ -36,7 +39,9 @@ const CategoryLink = () => {
               <span class="absolute bottom-0 right-0 hidden w-10 h-20 transition-all duration-100 ease-out transform translate-x-10 translate-y-8 bg-blue-400 -rotate-12"></span>
               <span class="relative">{category}</span>
             </button>
+            <Tooltip id="category"></Tooltip>
           </Link>
+          
         ))}
       </div>
     </div>

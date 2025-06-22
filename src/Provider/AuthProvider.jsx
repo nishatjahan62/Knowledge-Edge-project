@@ -11,13 +11,15 @@ import {
 import { app } from "../Firebase/Firebase.init";
 import { useEffect, useState } from "react";
 import AuthContext from "./AuthContext";
+import axios from "axios";
 
 const auth = getAuth(app);
+
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // sign up
+  // sign up (create user)
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
@@ -31,7 +33,18 @@ const AuthProvider = ({ children }) => {
 
   // user signUp
   const logOut = () => {
+    localStorage.removeItem("access-token")
     return signOut(auth);
+  };
+  // User update
+  const updateUser = (updatedData) => {
+    return updateProfile(auth.currentUser, updatedData);
+  };
+
+   // signIN with google
+  const googleProvider = new GoogleAuthProvider();
+  const SignInWithGoogle = () => {
+    return signInWithPopup(auth, googleProvider);
   };
 
   // Observer
@@ -39,23 +52,32 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
+      
+      // jwt call
+      if (currentUser?.email) {
+        const userData = { email: currentUser.email };
+        axios
+          .post("http://localhost:5000/jwt", userData)
+          .then((res) => {
+            const token = res.data.token;
+            localStorage.setItem("access-token", token);
+            console.log("token", res.data);
+          })
+          .catch((err) => console.log(err));
+      }
+      else{
+        localStorage.removeItem("access-token")
+      }
     });
+    
     return () => {
       unsubscribe();
     };
   }, []);
 
-  // User update
-  const updateUser = (updatedData) => {
-    return updateProfile(auth.currentUser, updatedData);
-  };
+  
 
-  // signIN with google
-  const googleProvider = new GoogleAuthProvider();
-  const SignInWithGoogle = () => {
-    return signInWithPopup(auth, googleProvider);
-  };
-
+ 
   const authInfo = {
     user,
     setUser,

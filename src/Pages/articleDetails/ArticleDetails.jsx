@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { useLoaderData } from "react-router";
 import AuthHook from "../../Hooks/AuthHook";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
 
 const ArticleDetails = () => {
   const {
@@ -56,14 +58,14 @@ const ArticleDetails = () => {
     axios
       .get(`http://localhost:5000/articles/${_id}/likes`)
       .then((res) => {
-        setLikes(res.data);
+        setLikes(res.data.likeCount);
       })
       .catch((err) => console.log(err));
 
     if (user) {
       axios.get("http://localhost:5000/all-articles").then((res) => {
         const articles = res.data.find((ar) => ar._id === _id);
-        if (articles?.likes?.includes(user.email)) {
+        if (articles?.likeUsers?.includes(user.email)) {
           setLiked(true);
         }
       });
@@ -84,7 +86,12 @@ const ArticleDetails = () => {
 
     const res = axios.post(
       `http://localhost:5000/articles/${_id}/comments`,
-      commentData
+      commentData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
     );
     if (res.data.insertedId) {
       setComments((prev) => [
@@ -95,6 +102,7 @@ const ArticleDetails = () => {
         ...prev,
       ]);
       setNewComment("");
+      toast.success("Your comment successfully added");
     }
   };
 
@@ -102,9 +110,17 @@ const ArticleDetails = () => {
 
   const handleLike = () => {
     axios
-      .post(`http://localhost:5000/articles/${_id}/like`, {
-        user_email: user.email,
-      })
+      .post(
+        `http://localhost:5000/articles/${_id}/like`,
+        {
+          user_email: user.email,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
       .then((res) => {
         if (res.data.alreadyLiked) {
           toast.error("You already liked this article");
@@ -118,7 +134,7 @@ const ArticleDetails = () => {
   };
 
   return (
-    <div className="mt-10 mx-8 lg:mx-15 ">
+    <div className="mt-30 mx-8 lg:mx-15 ">
       <div className="bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a] rounded-2xl">
         <div className="hero ">
           <div className="hero-content ">
@@ -154,21 +170,29 @@ const ArticleDetails = () => {
                     ))}
                 </ul>
               </div>
-              {user && (
-                <div>
+             
+                <div className="relative overflow-visible">
                   <button
-                    onClick={handleLike}
-                    className="flex justify-center items-center mx-auto mt-3 gap-2"
+                    data-tooltip-id="like-tooltip"
+                    data-tooltip-content="Click here to like this article"
+                    data-tooltip-place="top"
+                       className="flex justify-center items-center mx-auto mt-3 gap-2"
+                    onClick={()=>{
+                      if(!user){
+                        toast.error("you need to login to like this article.")
+                        return
+                      }
+                      handleLike()
+                    }}
+                 
                   >
                     <i class="fa-solid fa-thumbs-up text-yellow-400 cursor-pointer"></i>
                     {liked ? "liked" : "like"}
-                  </button>
-                  <p className="text-center  pt-2">
-                    Total likes : (
-                    {typeof likes === "object" ? likes.likeCount : likes})
-                  </p>
+                  </button>{" "}
+                  <Tooltip id="like-tooltip"></Tooltip>
+                  <p className="text-center  pt-2">Total likes : {likes}</p>
                 </div>
-              )}
+           
             </div>
           </div>
         </div>
@@ -186,20 +210,28 @@ const ArticleDetails = () => {
           </div>
         </div>
       </div>
+
       {/* comment */}
-      {user && (
+     
         <div className="mt-5  bg-[#FDFBD4] dark:bg-[#3a3a3a] p-5 rounded-2xl">
-          <form className=" " onSubmit={handleComment}>
+          <form className=" " onSubmit={(e)=>{
+            e.preventDefault()
+            if(!user){
+              toast.error("please login to submit a comment")
+              return
+            }
+            handleComment(e)
+          }}>
             <textarea
               name="content"
               className="textarea w-full rounded-2xl flex  lg:max-w-2xl sm:max-w-lg min-w-xs mx-auto"
               placeholder="Write your comment"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
+             
               required
             ></textarea>
             <div>
-              {" "}
               <button
                 type="submit"
                 className=" flex justify-center mx-auto mt-5"
@@ -212,7 +244,7 @@ const ArticleDetails = () => {
             </div>
           </form>
         </div>
-      )}
+    
 
       {/* show comments */}
       <div className="bg-white  rounded-2xl p-5 mt-5 dark:bg-[#3a3a3a]">

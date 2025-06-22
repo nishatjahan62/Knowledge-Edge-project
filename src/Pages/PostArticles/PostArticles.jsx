@@ -35,7 +35,7 @@ const PostArticles = () => {
   };
 
   return (
-    <div>
+    <div className=" pt-20 ">
       <form onSubmit={handlePostArticles}>
         <fieldset className="fieldset bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a]  border-base-300 rounded-box  w-sm sm:w-md lg:w-2xl border p-4 mt-15 mx-auto">
           <h2 className="font-[poppins] text-center pt-4 text-2xl lg:text-4xl font-bold text-blue-700 dark:text-blue-400">

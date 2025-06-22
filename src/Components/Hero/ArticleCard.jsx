@@ -33,26 +33,41 @@ const ArticleCard = ({ article }) => {
           </p>
           <p className="text-sm mt-2">{excerpt?.excerpt || content}</p>
           <div className="card-actions justify-end">
-            <button className="py-2 px-3 shadow-2xl bg-blue-400 rounded-2xl text-black font-bold">
+            <button className="py-1 px-3 shadow-2xl text-sm bg-blue-200 rounded-2xl text-black font-bold">
               {newPublicationDate}
             </button>
           </div>
           <div className="font-semibold ">
-            <p className=""><span className="text-blue-700 pr-1"><i class="fa-solid fa-comment"></i></span>Comments : {comments}</p>
-           <p> <i class="fa-solid fa-thumbs-up text-yellow-400 "></i>  Likes: {likes}</p>
+            <p className="">
+              <span className="text-blue-700 pr-1">
+                <i class="fa-solid fa-comment"></i>
+              </span>
+              Comments : {comments}
+            </p>
+            <p>
+              {" "}
+              <i class="fa-solid fa-thumbs-up text-yellow-400 "></i> Likes:{" "}
+              {likes}
+            </p>
           </div>
-          <Link to={`/article/${article._id}`}>
+
+          <div className="overflow-visible">
             {" "}
-            <div className="flex justify-center items-center pt-2">
-              <button
-                href="#_"
-                class="rounded relative inline-flex group items-center justify-center px-3.5 py-2 m-1 cursor-pointer border-b-4 border-l-2 active:border-blue-600 active:shadow-none shadow-lg bg-gradient-to-tr from-blue-600 to-blue-500 border-blue-700 text-white"
-              >
-                <span class="absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-hover:w-32 group-hover:h-32 opacity-10"></span>
-                <span class="relative font-bold font-[poppins]">Vew more</span>
-              </button>
-            </div>
-          </Link>
+            <Link to={`/article/${article._id}`}>
+              {" "}
+              <div className="flex justify-center items-center pt-2">
+                <button
+                  href="#_"
+                  class="rounded relative inline-flex group items-center justify-center px-3.5 py-2 m-1 cursor-pointer border-b-4 border-l-2 active:border-blue-600 active:shadow-none shadow-lg bg-gradient-to-tr from-blue-600 to-blue-500 border-blue-700 text-white"
+                >
+                  <span class="absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-hover:w-32 group-hover:h-32 opacity-10"></span>
+                  <span class="relative font-bold font-[poppins]">
+                    Vew more
+                  </span>
+                </button>
+              </div>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

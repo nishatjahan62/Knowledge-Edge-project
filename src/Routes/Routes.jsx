@@ -43,12 +43,8 @@ export const router = createBrowserRouter([
       },
       {
         path: "article/:id",
-        element: (
-          <PrivateRoute>
-            {" "}
-            <ArticleDetails></ArticleDetails>
-          </PrivateRoute>
-        ),
+        element: <ArticleDetails></ArticleDetails>,
+
         loader: ({ params }) =>
           fetch(`http://localhost:5000/articles/${params.id}`),
       },
@@ -75,7 +71,7 @@ export const router = createBrowserRouter([
             <UpdateArticle></UpdateArticle>
           </PrivateRoute>
         ),
-        hydrateFallbackElement:<Loading></Loading>,
+        hydrateFallbackElement: <Loading></Loading>,
         loader: ({ params }) =>
           fetch(`http://localhost:5000/articles/${params.id}`),
       },

@@ -2,7 +2,7 @@ import React from "react";
 
 const AboutUs = () => {
   return (
-    <div className="mx-5 lg:mx-10 font-[lora]">
+    <div className="mx-5  mt-25  lg:mx-10 font-[lora]">
       <h2 className="lg:text-5xl text-3xl text-center font-bold  text-[#305CDE] pt-5 mb-5 lg:pt-8 font-[poppins] lg:max-w-4xl mx-auto leading-normal">
         "Knowledge Edge – Empowering Students Through Shared Wisdom"
       </h2>

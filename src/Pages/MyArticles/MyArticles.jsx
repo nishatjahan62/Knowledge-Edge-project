@@ -6,7 +6,7 @@ import ArticleList from './ArticleList';
 const MyArticles = () => {
     const {user}=AuthHook()
     return (
-        <div className='mt-15  mx-5 lg:mx-20 '>
+        <div className='mt-25  mx-5 lg:mx-20 '>
            <Suspense>
            <ArticleList  ArticlePostedPromise={ArticlePostedPromise(user.email)}></ArticleList>
            </Suspense>
