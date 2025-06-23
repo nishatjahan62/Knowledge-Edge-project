@@ -16,7 +16,7 @@
 
 ### Backend =>
 
-🔗 **Vercel**: [Visit KnowledgeEdge Backend](/)
+🔗 **Vercel**: [Visit KnowledgeEdge Backend](https://assignment-11-server-sigma-lime.vercel.app/)
 
 ## 🎯 Purpose =>
 
