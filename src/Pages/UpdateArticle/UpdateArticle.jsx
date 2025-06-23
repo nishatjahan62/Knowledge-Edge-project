@@ -15,7 +15,7 @@ const UpdateArticle = ({ article, onUpdate }) => {
     if (data.tags) {
       data.tags = data.tags.split(",").map((tag) => tag.trim());
     }
-    console.log(article);
+    // console.log(article);
     axios
       .put(
         `https://assignment-11-server-sigma-lime.vercel.app/update-article/${article._id}`,

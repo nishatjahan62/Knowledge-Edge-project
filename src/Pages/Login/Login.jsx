@@ -23,7 +23,7 @@ const Login = () => {
     logIn(email, password)
       .then((res) => {
         const user = res.user;
-        console.log(user);
+        // console.log(user);
         navigate(from);
         Swal.fire({
           title: "Welcome Back!",
@@ -41,7 +41,7 @@ const Login = () => {
     SignInWithGoogle()
       .then((res) => {
         const user = res.user;
-        console.log(user);
+        // console.log(user);
         navigate(`${location.state ? location.state : "/"}`);
         Swal.fire({
           title: "Welcome Back!",
