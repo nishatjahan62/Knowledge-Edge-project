@@ -16,11 +16,15 @@ const PostArticles = () => {
 
     // add new article in database
     axios
-      .post("http://localhost:5000/articles", restArticles,{
-        headers:{
-          Authorization:`Bearer ${localStorage.getItem("access-token")}`
+      .post(
+        "https://assignment-11-server-sigma-lime.vercel.app/articles",
+        restArticles,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+          },
         }
-      })
+      )
       .then((res) => {
         if (res.data.insertedId) {
           Swal.fire({
@@ -31,7 +35,7 @@ const PostArticles = () => {
             showConfirmButton: false,
             timer: 1500,
           });
-          form.reset()
+          form.reset();
         }
       })
       .catch((err) => {

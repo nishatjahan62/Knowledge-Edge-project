@@ -39,14 +39,18 @@ export const router = createBrowserRouter([
         path: "article-by-category/:category",
         element: <CategoryPage></CategoryPage>,
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/articles/?category=${params.category}`),
+          fetch(
+            `https://assignment-11-server-sigma-lime.vercel.app/articles/?category=${params.category}`
+          ),
       },
       {
         path: "article/:id",
         element: <ArticleDetails></ArticleDetails>,
 
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/articles/${params.id}`),
+          fetch(
+            `https://assignment-11-server-sigma-lime.vercel.app/articles/${params.id}`
+          ),
       },
       {
         path: "post-articles",
@@ -73,7 +77,9 @@ export const router = createBrowserRouter([
         ),
         hydrateFallbackElement: <Loading></Loading>,
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/articles/${params.id}`),
+          fetch(
+            `https://assignment-11-server-sigma-lime.vercel.app/articles/${params.id}`
+          ),
       },
     ],
   },

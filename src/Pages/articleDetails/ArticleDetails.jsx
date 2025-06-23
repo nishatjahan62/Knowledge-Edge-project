@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLoaderData } from "react-router";
 import AuthHook from "../../Hooks/AuthHook";
 import axios from "axios";
@@ -48,7 +48,9 @@ const ArticleDetails = () => {
   useEffect(() => {
     // fetch comments
     axios
-      .get(`http://localhost:5000/articles/${_id}/comments`)
+      .get(
+        `https://assignment-11-server-sigma-lime.vercel.app/articles/${_id}/comments`
+      )
       .then((res) => {
         setComments(res.data);
       })
@@ -56,19 +58,23 @@ const ArticleDetails = () => {
 
     // fetch likes
     axios
-      .get(`http://localhost:5000/articles/${_id}/likes`)
+      .get(
+        `https://assignment-11-server-sigma-lime.vercel.app/articles/${_id}/likes`
+      )
       .then((res) => {
         setLikes(res.data.likeCount);
       })
       .catch((err) => console.log(err));
 
     if (user) {
-      axios.get("http://localhost:5000/all-articles").then((res) => {
-        const articles = res.data.find((ar) => ar._id === _id);
-        if (articles?.likeUsers?.includes(user.email)) {
-          setLiked(true);
-        }
-      });
+      axios
+        .get("https://assignment-11-server-sigma-lime.vercel.app/all-articles")
+        .then((res) => {
+          const articles = res.data.find((ar) => ar._id === _id);
+          if (articles?.likeUsers?.includes(user.email)) {
+            setLiked(true);
+          }
+        });
     }
   }, [_id, user]);
 
@@ -85,7 +91,7 @@ const ArticleDetails = () => {
     };
 
     const res = axios.post(
-      `http://localhost:5000/articles/${_id}/comments`,
+      `https://assignment-11-server-sigma-lime.vercel.app/articles/${_id}/comments`,
       commentData,
       {
         headers: {
@@ -111,7 +117,7 @@ const ArticleDetails = () => {
   const handleLike = () => {
     axios
       .post(
-        `http://localhost:5000/articles/${_id}/like`,
+        `https://assignment-11-server-sigma-lime.vercel.app/articles/${_id}/like`,
         {
           user_email: user.email,
         },
@@ -170,29 +176,27 @@ const ArticleDetails = () => {
                     ))}
                 </ul>
               </div>
-             
-                <div className="relative overflow-visible">
-                  <button
-                    data-tooltip-id="like-tooltip"
-                    data-tooltip-content="Click here to like this article"
-                    data-tooltip-place="top"
-                       className="flex justify-center items-center mx-auto mt-3 gap-2"
-                    onClick={()=>{
-                      if(!user){
-                        toast.error("you need to login to like this article.")
-                        return
-                      }
-                      handleLike()
-                    }}
-                 
-                  >
-                    <i className="fa-solid fa-thumbs-up text-yellow-400 cursor-pointer"></i>
-                    {liked ? "liked" : "like"}
-                  </button>{" "}
-                  <Tooltip id="like-tooltip"></Tooltip>
-                  <p className="text-center  pt-2">Total likes : {likes}</p>
-                </div>
-           
+
+              <div className="relative overflow-visible">
+                <button
+                  data-tooltip-id="like-tooltip"
+                  data-tooltip-content="Click here to like this article"
+                  data-tooltip-place="top"
+                  className="flex justify-center items-center mx-auto mt-3 gap-2"
+                  onClick={() => {
+                    if (!user) {
+                      toast.error("you need to login to like this article.");
+                      return;
+                    }
+                    handleLike();
+                  }}
+                >
+                  <i className="fa-solid fa-thumbs-up text-yellow-400 cursor-pointer"></i>
+                  {liked ? "liked" : "like"}
+                </button>{" "}
+                <Tooltip id="like-tooltip"></Tooltip>
+                <p className="text-center  pt-2">Total likes : {likes}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -212,39 +216,39 @@ const ArticleDetails = () => {
       </div>
 
       {/* comment */}
-     
-        <div className="mt-5  bg-[#FDFBD4] dark:bg-[#3a3a3a] p-5 rounded-2xl mx-8 lg:mx-15">
-          <form className=" " onSubmit={(e)=>{
-            e.preventDefault()
-            if(!user){
-              toast.error("please login to submit a comment")
-              return
+
+      <div className="mt-5  bg-[#FDFBD4] dark:bg-[#3a3a3a] p-5 rounded-2xl mx-8 lg:mx-15">
+        <form
+          className=" "
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!user) {
+              toast.error("please login to submit a comment");
+              return;
             }
-            handleComment(e)
-          }}>
-            <textarea
-              name="content"
-              className="textarea w-full rounded-2xl flex  lg:max-w-2xl sm:max-w-lg min-w-xs mx-auto"
-              placeholder="Write your comment"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-             
-              required
-            ></textarea>
-            <div>
-              <button
-                type="submit"
-                className=" flex justify-center mx-auto mt-5"
-              >
-                <div className="relative rounded py-2 px-4 overflow-hidden group bg-blue-500  hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300">
-                  <span className="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
-                  <span className="relative text-xl font-bold">Submit comment</span>
-                </div>
-              </button>
-            </div>
-          </form>
-        </div>
-    
+            handleComment(e);
+          }}
+        >
+          <textarea
+            name="content"
+            className="textarea w-full rounded-2xl flex  lg:max-w-2xl sm:max-w-lg min-w-xs mx-auto"
+            placeholder="Write your comment"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            required
+          ></textarea>
+          <div>
+            <button type="submit" className=" flex justify-center mx-auto mt-5">
+              <div className="relative rounded py-2 px-4 overflow-hidden group bg-blue-500  hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300">
+                <span className="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+                <span className="relative text-xl font-bold">
+                  Submit comment
+                </span>
+              </div>
+            </button>
+          </div>
+        </form>
+      </div>
 
       {/* show comments */}
       <div className="bg-white  rounded-2xl p-5 mt-5 dark:bg-[#3a3a3a] mx-8 lg:mx-15">

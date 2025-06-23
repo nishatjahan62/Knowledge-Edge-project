@@ -17,11 +17,15 @@ const UpdateArticle = ({ article, onUpdate }) => {
     }
     console.log(article);
     axios
-      .put(`http://localhost:5000/update-article/${article._id}`, data,{
-         headers:{
-          Authorization:`Bearer ${localStorage.getItem("access-token")}`
+      .put(
+        `https://assignment-11-server-sigma-lime.vercel.app/update-article/${article._id}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+          },
         }
-      })
+      )
       .then((res) => {
         if (res.data.modifiedCount > 0) {
           Swal.fire({
@@ -43,9 +47,9 @@ const UpdateArticle = ({ article, onUpdate }) => {
       });
   };
   return (
-    <div>
+    <div className="">
       <form onSubmit={HandleUpdate}>
-        <fieldset className="fieldset bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a]  border-base-300 rounded-box  w-sm sm:w-md lg:w-2xl border p-4 mt-15 mx-auto">
+        <fieldset className="fieldset bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a]  border-base-300 rounded-box  w-sm sm:w-md lg:w-2xl border mt-15  mx-auto">
           <h2 className="font-[poppins] text-center pt-4 text-2xl lg:text-4xl font-bold text-blue-700 dark:text-blue-400">
             Update your Article here
           </h2>

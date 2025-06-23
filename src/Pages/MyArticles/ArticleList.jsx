@@ -101,7 +101,7 @@ const ArticleList = ({ ArticlePostedPromise }) => {
       {/* Modal */}
       {isModalOpen && (
         <div className="  bg-opacity-50 flex items-center justify-center ">
-          <div className="bg-white rounded-2xl px-10 relative pb-10 -top-80">
+          <div className="bg-white rounded-2xl px-10 relative pb-10 -top-40">
             <button
               onClick={closeModal}
               className="absolute top-5 right-10 text-red-600 font-bold text-xl "

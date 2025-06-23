@@ -7,7 +7,7 @@ import { Typewriter } from "react-simple-typewriter";
 const CategoryLink = () => {
   const [categories, setCategories] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000/all-articles")
+    fetch("https://assignment-11-server-sigma-lime.vercel.app/all-articles")
       .then((res) => res.json())
       .then((data) => {
         const singleCategory = [
@@ -22,11 +22,12 @@ const CategoryLink = () => {
       <h2 className="text-center font-bold text-4xl dark:text-[#FDFBD4]  text-[#305CDE] pb-5 ">
         {" "}
         <Typewriter
-            words={[" Explore Article By Category"]}
-            loop={0}
-            cursor
-            cursorStyle="|"
-          ></Typewriter></h2>
+          words={[" Explore Article By Category"]}
+          loop={0}
+          cursor
+          cursorStyle="|"
+        ></Typewriter>
+      </h2>
       <p className="text-md pb-5   text-center lg:max-w-[800px] mx-auto">
         Discover articles by category in a visually engaging layout. Each button
         leads to curated content, making exploration intuitive and enjoyable.

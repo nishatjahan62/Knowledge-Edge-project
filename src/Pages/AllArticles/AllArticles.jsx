@@ -7,7 +7,8 @@ const AllArticles = () => {
 
   useEffect(() => {
     const fetchArticles = async () => {
-      let url = "http://localhost:5000/all-articles";
+      let url =
+        "https://assignment-11-server-sigma-lime.vercel.app/all-articles";
       if (filter && filter.toLowerCase() !== "select category") {
         url += `?category=${encodeURIComponent(filter)}`;
       }

@@ -6,9 +6,11 @@
 
 ### Frontend =>
 
-🔗 **Netlify**: [Visit KnowledgeEdge ]()
+🔗 **Firebase**: [Visit KnowledgeEdge](https://ph-b11-assignment-11.web.app/)
 
-🔗 **Firebase**: [Visit KnowledgeEdge]()
+🔗 **Netlify**: [Visit KnowledgeEdge ](https://ph-assignment-11-client.netlify.app/)
+
+🔗 **Surge**: [Visit KnowledgeEdge ](https://ph-b11-assignment-11-client.surge.sh/)
 
 ---
 
@@ -109,8 +111,6 @@
 — 🧼 [\*\*React Tooltip\*\*](https://react-tooltip.com/)
 
 — ✒️ [\*\*React Simple Typewriter\*\*](https://react-simple-typewriter.vercel.app/)
-
-
 
 — 🎞️ [\*\*Framer-Motion\*\*](https://motion.dev/)
 

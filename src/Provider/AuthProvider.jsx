@@ -58,14 +58,16 @@ const AuthProvider = ({ children }) => {
       if (currentUser?.email) {
         const userData = { email: currentUser.email };
         axios
-          .post("http://localhost:5000/jwt", userData)
+          .post(
+            "https://assignment-11-server-sigma-lime.vercel.app/jwt",
+            userData
+          )
           .then((res) => {
             const token = res.data.token;
             localStorage.setItem("access-token", token);
           })
           .catch((err) => console.log(err));
       } else {
-     
         localStorage.removeItem("access-token");
       }
     });
