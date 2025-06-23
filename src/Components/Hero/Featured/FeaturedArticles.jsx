@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ArticleCard from "../ArticleCard";
+import { Typewriter } from "react-simple-typewriter";
 
 const FeaturedArticles = () => {
   const [articles, setArticles] = useState([]);
@@ -13,7 +14,12 @@ const FeaturedArticles = () => {
   return (
     <div>
       <h2 className="text-center font-bold text-4xl text-[#305CDE] dark:text-[#f3f1d3] py-10 ">
-        Featured Articles
+       <Typewriter
+            words={[" Featured Articles"]}
+            loop={0}
+            cursor
+            cursorStyle="|"
+          ></Typewriter>
       </h2>
       <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-6 w-full justify-center items-center pb-10">
         {articles.map((article) => (

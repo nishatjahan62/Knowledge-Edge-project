@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CategoryPage from "./CategoryPage";
 import { Link } from "react-router";
 import { Tooltip } from "react-tooltip";
+import { Typewriter } from "react-simple-typewriter";
 
 const CategoryLink = () => {
   const [categories, setCategories] = useState([]);
@@ -17,18 +18,25 @@ const CategoryLink = () => {
   }, []);
 
   return (
-    <div className="mt-10 mx-5 lg:mx-10 bg-[#F4F2D0] dark:bg-[#252728] dark:to-[#3a3a3a]  shadow-2xl border border-[#FDFBD4] dark:border-gray-400 py-10 rounded-2xl">
+    <div className="mt-10 mx-5 lg:mx-10 bg-[#F4F2D0] dark:bg-[#252728] dark:to-[#3a3a3a]  shadow-2xl border border-[#FDFBD4] dark:border-gray-400 py-8 rounded-2xl">
       <h2 className="text-center font-bold text-4xl dark:text-[#FDFBD4]  text-[#305CDE] pb-5 ">
         {" "}
-        Explore Article By Category
-      </h2>
-      <p className="text-md pb-5   text-center lg:max-w-[800px] mx-auto">Discover articles by category in a visually engaging layout. Each button leads to curated content, making exploration intuitive and enjoyable.</p>
+        <Typewriter
+            words={[" Explore Article By Category"]}
+            loop={0}
+            cursor
+            cursorStyle="|"
+          ></Typewriter></h2>
+      <p className="text-md pb-5   text-center lg:max-w-[800px] mx-auto">
+        Discover articles by category in a visually engaging layout. Each button
+        leads to curated content, making exploration intuitive and enjoyable.
+      </p>
       <div className=" flex flex-wrap gap-10  justify-center items-center">
         {categories.map((category) => (
           <Link key={category} to={`/article-by-category/${category}`}>
             <button
-            data-tooltip-id="category"
-            data-tooltip-content={`click to explore ${category} article`}
+              data-tooltip-id="category"
+              data-tooltip-content={`click to explore ${category} article`}
               href="#_"
               class="relative px-5 py-2 font-medium text-white group"
             >
@@ -41,7 +49,6 @@ const CategoryLink = () => {
             </button>
             <Tooltip id="category"></Tooltip>
           </Link>
-          
         ))}
       </div>
     </div>

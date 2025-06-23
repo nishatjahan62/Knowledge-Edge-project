@@ -110,7 +110,7 @@
 
 — ✒️ [\*\*React Simple Typewriter\*\*](https://react-simple-typewriter.vercel.app/)
 
-— 💫 [\*\*React Awesome Reveal\*\*](https://react-awesome-reveal.morello.dev/)
+
 
 — 🎞️ [\*\*Framer-Motion\*\*](https://motion.dev/)
 

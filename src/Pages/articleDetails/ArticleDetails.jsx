@@ -134,8 +134,8 @@ const ArticleDetails = () => {
   };
 
   return (
-    <div classNameName="mt-30 mx-8 lg:mx-15 ">
-      <div className="bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a] rounded-2xl">
+    <div classNameName=" mx-8 lg:mx-15 ">
+      <div className="bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a] rounded-2xl mt-30 mx-8 lg:mx-15">
         <div className="hero ">
           <div className="hero-content ">
             <div className="max-w-md">
@@ -213,7 +213,7 @@ const ArticleDetails = () => {
 
       {/* comment */}
      
-        <div className="mt-5  bg-[#FDFBD4] dark:bg-[#3a3a3a] p-5 rounded-2xl">
+        <div className="mt-5  bg-[#FDFBD4] dark:bg-[#3a3a3a] p-5 rounded-2xl mx-8 lg:mx-15">
           <form className=" " onSubmit={(e)=>{
             e.preventDefault()
             if(!user){
@@ -247,7 +247,7 @@ const ArticleDetails = () => {
     
 
       {/* show comments */}
-      <div className="bg-white  rounded-2xl p-5 mt-5 dark:bg-[#3a3a3a]">
+      <div className="bg-white  rounded-2xl p-5 mt-5 dark:bg-[#3a3a3a] mx-8 lg:mx-15">
         {" "}
         <h3 className="text-left px-5 text-2xl font-bold pb-3 text-blue-600 dark:text-blue-400">
           Comments by reader : {comments.length}
