@@ -83,14 +83,14 @@ const ArticleList = ({ ArticlePostedPromise }) => {
                     onClick={() => handleDelete(art._id)}
                     className="cursor-pointer "
                   >
-                    <i class="fa-solid fa-trash"></i>
+                    <i className="fa-solid fa-trash"></i>
                   </button>
                   /
                   <button
                     onClick={() => handleEdit(art)}
                     className="cursor-pointer pl-1"
                   >
-                    <i class="fa-solid fa-pen-to-square"></i>
+                    <i className="fa-solid fa-pen-to-square"></i>
                   </button>
                 </td>
               </tr>

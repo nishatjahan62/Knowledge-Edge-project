@@ -89,7 +89,7 @@ const ArticleDetails = () => {
       commentData,
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("access-token")}`,
         },
       }
     );
@@ -117,7 +117,7 @@ const ArticleDetails = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("access-token")}`,
           },
         }
       )
@@ -134,7 +134,7 @@ const ArticleDetails = () => {
   };
 
   return (
-    <div className="mt-30 mx-8 lg:mx-15 ">
+    <div classNameName="mt-30 mx-8 lg:mx-15 ">
       <div className="bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a] rounded-2xl">
         <div className="hero ">
           <div className="hero-content ">
@@ -186,7 +186,7 @@ const ArticleDetails = () => {
                     }}
                  
                   >
-                    <i class="fa-solid fa-thumbs-up text-yellow-400 cursor-pointer"></i>
+                    <i className="fa-solid fa-thumbs-up text-yellow-400 cursor-pointer"></i>
                     {liked ? "liked" : "like"}
                   </button>{" "}
                   <Tooltip id="like-tooltip"></Tooltip>
@@ -236,9 +236,9 @@ const ArticleDetails = () => {
                 type="submit"
                 className=" flex justify-center mx-auto mt-5"
               >
-                <div class="relative rounded py-2 px-4 overflow-hidden group bg-blue-500  hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300">
-                  <span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
-                  <span class="relative text-xl font-bold">Submit comment</span>
+                <div className="relative rounded py-2 px-4 overflow-hidden group bg-blue-500  hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300">
+                  <span className="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+                  <span className="relative text-xl font-bold">Submit comment</span>
                 </div>
               </button>
             </div>

@@ -17,7 +17,11 @@ const UpdateArticle = ({ article, onUpdate }) => {
     }
     console.log(article);
     axios
-      .put(`http://localhost:5000/update-article/${article._id}`, data)
+      .put(`http://localhost:5000/update-article/${article._id}`, data,{
+         headers:{
+          Authorization:`Bearer ${localStorage.getItem("access-token")}`
+        }
+      })
       .then((res) => {
         if (res.data.modifiedCount > 0) {
           Swal.fire({

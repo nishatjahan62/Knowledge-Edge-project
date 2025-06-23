@@ -33,7 +33,8 @@ const AuthProvider = ({ children }) => {
 
   // user signUp
   const logOut = () => {
-    localStorage.removeItem("access-token")
+    console.log("logging out");
+    localStorage.removeItem("access-token");
     return signOut(auth);
   };
   // User update
@@ -41,7 +42,7 @@ const AuthProvider = ({ children }) => {
     return updateProfile(auth.currentUser, updatedData);
   };
 
-   // signIN with google
+  // signIN with google
   const googleProvider = new GoogleAuthProvider();
   const SignInWithGoogle = () => {
     return signInWithPopup(auth, googleProvider);
@@ -52,7 +53,7 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
-      
+
       // jwt call
       if (currentUser?.email) {
         const userData = { email: currentUser.email };
@@ -61,23 +62,19 @@ const AuthProvider = ({ children }) => {
           .then((res) => {
             const token = res.data.token;
             localStorage.setItem("access-token", token);
-            console.log("token", res.data);
           })
           .catch((err) => console.log(err));
-      }
-      else{
-        localStorage.removeItem("access-token")
+      } else {
+        console.log("No user detected, removing token...");
+        localStorage.removeItem("access-token");
       }
     });
-    
+
     return () => {
       unsubscribe();
     };
   }, []);
 
-  
-
- 
   const authInfo = {
     user,
     setUser,

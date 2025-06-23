@@ -16,7 +16,11 @@ const PostArticles = () => {
 
     // add new article in database
     axios
-      .post("http://localhost:5000/articles", restArticles)
+      .post("http://localhost:5000/articles", restArticles,{
+        headers:{
+          Authorization:`Bearer ${localStorage.getItem("access-token")}`
+        }
+      })
       .then((res) => {
         if (res.data.insertedId) {
           Swal.fire({
@@ -27,6 +31,7 @@ const PostArticles = () => {
             showConfirmButton: false,
             timer: 1500,
           });
+          form.reset()
         }
       })
       .catch((err) => {
