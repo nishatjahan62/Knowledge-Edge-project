@@ -18,7 +18,7 @@ const Button = ({
       onClick={onClick}
       type={type}
       className={`
-      "rounded relative inline-flex group items-center justify-center px-3 py-2 m-1 cursor-pointer border-b-4 border-l-2 active:border-blue-600 active:shadow-none shadow-lg bg-gradient-to-tr from-blue-600 to-blue-500 border-blue-700 text-white"
+      "rounded relative inline-flex group items-center justify-center px-3 py-2 m-1 cursor-pointer border-b-4 border-b-[var(--color-primary)] rounded-lg border-l-[var(--color-primary)]  border-l-2 bg-[var(--color-primary)] text-white"
         ${sizes[size]} ${className}
       `}
     >

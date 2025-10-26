@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, Outlet } from "react-router";
-
 import Swal from "sweetalert2";
-
 // Assets
 import UserIcon from "../../public/userIcon.png";
 import LightLogo from "../../public/Logo&Name.png";
@@ -10,8 +8,10 @@ import DarkLogo from "../../public/Logo&NameDark.png";
 import OnlyLogo from "../../public/mainLogo.png";
 
 // React Icons
-import { FaHome, FaUser, FaUsers, FaChartPie, FaMoon, FaSun, FaBars } from "react-icons/fa";
+import { FaHome, FaUser, FaUsers, FaChartPie, FaMoon, FaSun, FaBars, FaFileAlt } from "react-icons/fa";
 import AuthHook from "../Hooks/AuthHook";
+import UseUserRole from "../Hooks/UseUserRole";
+; // <-- your custom hook
 
 // Nav Section Title Component
 const NavSectionTitle = ({ children }) => (
@@ -22,6 +22,7 @@ const NavSectionTitle = ({ children }) => (
 
 const DashboardLayout = () => {
   const { user, logOut } = AuthHook();
+  const { role } = UseUserRole(); 
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const DashboardLayout = () => {
     `flex items-center gap-3 text-sm font-medium rounded-lg transition-all duration-200 p-3 mx-2 ${
       isActive
         ? "bg-primary text-white shadow-md transform scale-[1.02]"
-        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary"
+        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary dark:hover:text-primary"
     }`;
 
   return (
@@ -97,7 +98,7 @@ const DashboardLayout = () => {
                   <li>
                     <a
                       onClick={handleLogOut}
-                      className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
+                      className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 cursor-pointer"
                     >
                       Logout
                     </a>
@@ -106,7 +107,7 @@ const DashboardLayout = () => {
               </div>
             ) : (
               <Link to="/auth/Login">
-                <Button label="Sign In" />
+                <button className="btn btn-primary">Sign In</button>
               </Link>
             )}
           </div>
@@ -139,13 +140,15 @@ const DashboardLayout = () => {
               </div>
               <h2 className="font-bold text-xl mt-3 text-gray-900 dark:text-gray-100">{user.displayName || "Welcome"}</h2>
               <span className="text-sm font-semibold text-primary dark:text-primary-focus capitalize mt-1 px-3 py-1 bg-primary/10 dark:bg-primary/20 rounded-full">
-                User
+                {role || "User"}
               </span>
             </div>
           )}
 
           <ul className="py-4 space-y-1">
             <NavSectionTitle>Navigation</NavSectionTitle>
+            
+            {/* Common Links */}
             <li>
               <NavLink to="/" className={NavLinkClass}>
                 <FaHome /> Home
@@ -161,11 +164,59 @@ const DashboardLayout = () => {
                 <FaUser /> Profile
               </NavLink>
             </li>
-            <li>
-              <NavLink to="/dashboard/manage-users" className={NavLinkClass}>
-                <FaUsers /> Manage Users
-              </NavLink>
-            </li>
+
+            {/* Admin Links */}
+            {role === "admin" && (
+              <>
+                <li>
+                  <NavLink to="/dashboard/manage-users" className={NavLinkClass}>
+                    <FaUsers /> Manage Users
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/dashboard/applications" className={NavLinkClass}>
+                    <FaFileAlt /> Applications
+                  </NavLink>
+                </li>
+              </>
+            )}
+
+            {/* Author Links */}
+            {role === "author" && (
+              <>
+                <li>
+                  <NavLink to="/post-article" className={NavLinkClass}>
+                    <FaFileAlt /> Post Article
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/my-articles" className={NavLinkClass}>
+                    <FaFileAlt /> My Articles
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/dashboard/my-followers" className={NavLinkClass}>
+                    <FaUsers /> My Followers
+                  </NavLink>
+                </li>
+              </>
+            )}
+
+            {/* User Links */}
+            {role === "user" && (
+              <>
+                <li>
+                  <NavLink to="/dashboard/apply-author" className={NavLinkClass}>
+                    <FaFileAlt /> Apply for Author Role
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/dashboard/my-applications" className={NavLinkClass}>
+                    <FaFileAlt /> My Applications
+                  </NavLink>
+                </li>
+              </>
+            )}
           </ul>
         </aside>
       </div>

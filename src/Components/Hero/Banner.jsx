@@ -1,32 +1,35 @@
 import React from "react";
-import { motion, scale } from "motion/react";
+import { motion } from "motion/react";
 import { Link } from "react-router";
-import { animate } from "motion";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import Button from "../../Pages/Button/Button";
 
 const Banner = () => {
   return (
-    <div className="hero mt-15 bg-gradient-to-b from bg-[#FDFBD4] to-[#57B9FF80] dark:bg-[#252728] dark:to-[#3a3a3a]  pt-10 py-5 lg:pb-0 rounded-4xl  shadow-2xl ">
+    <div className="hero mt-15 bg-gradient-to-b from-[#FDFBD4] to-[#57B9FF80] dark:from-[#111111] dark:to-[#2b2b2b] pt-10 py-5 lg:pb-0 rounded-4xl shadow-2xl transition-colors duration-500">
       <div className="hero-content flex-col lg:flex-row-reverse">
+        {/* === Images Section === */}
         <div className="flex-1 flex flex-col gap-4 items-center lg:items-end relative justify-center">
           <img
             src="/article01.jpg"
-            className="lg:max-w-md w-70 md:w-80 lg:w-[90%] rounded-2xl shadow-2xl "
+            alt="Article visual 1"
+            className="lg:max-w-md w-70 md:w-80 lg:w-[90%] rounded-2xl shadow-2xl dark:shadow-gray-900 transition-all duration-700 hover:scale-[1.03] hover:brightness-105 dark:hover:shadow-blue-900/40"
           />
           <img
             src="/article02.jpg"
-            className="lg:max-w-md rounded-2xl w-70 md:w-80 lg:w-[90%] shadow-2xl lg:relative lg:-top-20 lg:left-20 relative -top-15 left-5 "
+            alt="Article visual 2"
+            className="lg:max-w-md rounded-2xl w-70 md:w-80 lg:w-[90%] shadow-2xl lg:relative lg:-top-20 lg:left-20 relative -top-15 left-5 dark:shadow-gray-900 transition-all duration-700 hover:scale-[1.03] hover:brightness-105 dark:hover:shadow-blue-900/40"
           />
         </div>
 
+        {/* === Text Section === */}
         <div className="flex-1 lg:text-left text-center">
           <motion.h2
             initial={{ x: -200, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 4 }}
-            className="text-xl sm:text-2xl lg:text-4xl font-bold  text-[#305CDE] max-w-xl min-w-xs pb-5 leading-normal"
+            className="text-xl sm:text-2xl lg:text-4xl font-bold text-[#305CDE] dark:text-blue-400 max-w-xl min-w-xs pb-5 leading-normal"
           >
             <motion.span
               animate={{
@@ -42,34 +45,38 @@ const Banner = () => {
                 transition: { duration: 5, repeat: Infinity },
               }}
             >
-              {" "}
-              "KnowledgeEdge"
+              “KnowledgeEdge”
             </motion.span>{" "}
-            The MERN Stack Gateway to Student Wisdom and Collaboration
+            — The MERN Stack Gateway to Student Wisdom and Collaboration
           </motion.h2>
 
           <motion.h2
             initial={{ x: 200, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 4 }}
-            className=" text-lg lg:text-2xl font-bold  "
+            className="text-lg lg:text-2xl font-bold text-gray-800 dark:text-gray-200"
           >
             Share Your Knowledge
           </motion.h2>
-          <p className="py-6 text-sm lg:text-base ">
+
+          <p className="py-6 text-sm lg:text-base text-gray-700 dark:text-gray-300">
             Let your thoughts flow into the world. Write with passion. Share
             with purpose.
           </p>
+
           <Link to="/all-articles">
             <div
               data-tooltip-id="explore-article"
-              data-tooltip-content="Click to explore all article"
-              href="#_"
+              data-tooltip-content="Click to explore all articles"
             >
-              <Button label="Explore All articles "></Button>
+              <Button label="Explore All Articles" />
             </div>
           </Link>
-          <Tooltip id="explore-article"></Tooltip>
+
+          <Tooltip
+            id="explore-article"
+            className="dark:bg-gray-700 dark:text-gray-100 text-sm"
+          />
         </div>
       </div>
     </div>

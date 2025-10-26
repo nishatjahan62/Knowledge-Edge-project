@@ -16,7 +16,7 @@ const GoogleLogin = () => {
   try {
     const result = await SignInWithGoogle();
     const user = result.user;
-    console.log("Google User:", user); // check photoURL here
+    console.log("Google User:", user); 
 
     const userInfo = {
       name: user.displayName,
@@ -25,7 +25,7 @@ const GoogleLogin = () => {
       role: "user",
     };
 
-    await axiosInstance.post("/users", userInfo);
+    await axiosInstance.post("/user", userInfo);
 
     // Make sure your auth state has the full Google user
     setUser(user);

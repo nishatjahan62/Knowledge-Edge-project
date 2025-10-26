@@ -15,18 +15,20 @@ import PrivateRoute from "../Provider/PrivateRoute";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import DashboardHome from "../Pages/Dashboard/DashboardHome/DashboardHome";
 import Profile from "../Pages/Dashboard/Profile/Profile";
-import TransactionHistory from "../Pages/Dashboard/Admin/TransactionHistory";
 import ManageUsers from "../Pages/Dashboard/Admin/ManageUsers";
 import MyFollowers from "../Pages/Dashboard/Author/MyFollowers";
 import MyApplications from "../Pages/Dashboard/User/MyApplications";
-
 import Applications from "../Pages/Dashboard/Admin/Applications";
 import ApplyForAuthorRole from "../Pages/Dashboard/User/ApplyForAuthorRole";
-import PostArticles from "../Pages/Dashboard/Author/PostArticles";
-import MyArticles from "../Pages/Dashboard/Author/MyArticles";
+
 import UpdateArticle from "../Pages/UpdateArticle/UpdateArticle";
 import ForbiddenPage from "../Pages/Error/ForbiddenPage";
 import Overview from "../Pages/Dashboard/Overview/Overview";
+import AdminRoute from "./AdminRoutes";
+import Bookmarks from "../Pages/BookMarks/BookMarks";
+import AllAuthors from "../Pages/AllAuthor/AllAuthors";
+import PostArticles from "../Pages/PostArticles/PostArticles";
+import MyArticles from "../Pages/MyArticles/MyArticles";
 
 
 export const router = createBrowserRouter([
@@ -67,6 +69,21 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <MyArticles />
+          </PrivateRoute>
+        ),
+      },{
+        path: "bookmarks",
+        element: (
+          <PrivateRoute>
+            <Bookmarks />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "all-authors",
+        element: (
+          <PrivateRoute>
+            <AllAuthors />
           </PrivateRoute>
         ),
       },
@@ -120,22 +137,16 @@ export const router = createBrowserRouter([
         path: "applications",
         element: (
        
-            <Applications/>
+           <AdminRoute> <Applications/></AdminRoute>
     
         ),
       },
-      {
-        path: "transaction-history",
-        element: (
-            <TransactionHistory />
-        
-        ),
-      },
+  
       {
         path: "manage-users",
         element: (
-      
-            <ManageUsers />
+      <AdminRoute> <ManageUsers /></AdminRoute>
+           
          
         ),
       },
@@ -149,14 +160,7 @@ export const router = createBrowserRouter([
          
         ),
       },
-      {
-        path: "my-applications",
-        element: (
-         
-            <MyApplications />
-     
-        ),
-      },
+      
 
       // User Routes
       {
@@ -168,18 +172,10 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "my-applications",
+        path: "my-application",
         element: (
           <PrivateRoute>
             <MyApplications/>
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "my-transaction-history",
-        element: (
-          <PrivateRoute>
-            <TransactionHistory />
           </PrivateRoute>
         ),
       },

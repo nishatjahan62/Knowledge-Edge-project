@@ -4,9 +4,12 @@ import AuthHook from "../../Hooks/AuthHook";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import Button from "../../Pages/Button/Button";
+import UseUserRole from "../../Hooks/UseUserRole";
+import { FaBookmark } from "react-icons/fa";
 
 const Navbar = () => {
   const { user, logOut } = AuthHook();
+  const{role }=UseUserRole()
   const handleLogOut = () => {
     logOut()
       .then(() => {
@@ -47,98 +50,116 @@ const Navbar = () => {
     }
   };
 
-  const NavLinks = (
-    <>
-      <ul className="flex lg:flex-row flex-col items-center justify-center gap-2 lg:gap-4 text-lg ">
-        <li>
-          {" "}
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              isActive
-                ? " border-b-3 pb-1 font-bold text-blue-700"
-                : "hover:border  hover:border-none hover:rounded-2xl  hover:bg-blue-100 dark:hover:bg-gray-700 px-2 py-0.5 "
-            }
-          >
-            Home
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/all-articles"
-            className={({ isActive }) =>
-              isActive
-                ? " border-b-3 pb-1 text-blue-700 font-bold "
-                : " hover:border  hover:border-none hover:rounded-2xl  hover:bg-blue-100 dark:hover:bg-gray-700 px-2 py-0.5 "
-            }
-          >
-            All Articles
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/about-us"
-            className={({ isActive }) =>
-              isActive
-                ? " border-b-3 pb-1 text-blue-700 font-bold"
-                : "hover:border  hover:border-none hover:rounded-2xl  hover:bg-blue-100 dark:hover:bg-gray-700 px-2 py-0.5"
-            }
-          >
-            {" "}
-            About us
-          </NavLink>
-        </li>
-        <li>
-          {" "}
-          {user && (
-            <NavLink
-              to="/post-articles"
-              className={({ isActive }) =>
-                isActive
-                  ? " border-b-3 pb-1 text-blue-700 font-bold"
-                  : "hover:border  hover:border-none hover:rounded-2xl  hover:bg-blue-100 dark:hover:bg-gray-700 px-2 py-0.5"
-              }
-            >
-              {" "}
-              Post Articles
-            </NavLink>
-          )}
-        </li>
-         <li>
-          {" "}
-          {user && (
-            <NavLink
-              to="/dashboard"
-              className={({ isActive }) =>
-                isActive
-                  ? " border-b-3 pb-1 text-blue-700 font-bold"
-                  : "hover:border  hover:border-none hover:rounded-2xl  hover:bg-blue-100 dark:hover:bg-gray-700 px-2 py-0.5"
-              }
-            >
-              {" "}
-             Dashboard
-            </NavLink>
-          )}
-        </li>
-        <li>
-          {" "}
-          {user && (
-            <NavLink
-              to="/my-posted-articles"
-              className={({ isActive }) =>
-                isActive
-                  ? " border-b-3 pb-1 text-blue-700 font-bold"
-                  : "hover:border  hover:border-none hover:rounded-2xl  hover:bg-blue-100 dark:hover:bg-gray-700 px-2 py-0.5"
-              }
-            >
-              {" "}
-              My Articles
-            </NavLink>
-          )}
-        </li>
-      </ul>
-    </>
-  );
+   const NavLinks = (
+  <>
+    <ul className="flex lg:flex-row flex-col items-center justify-center gap-2 lg:gap-4 text-lg ">
+      <li>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive
+              ? "border-b-2 pb-1 font-bold text-blue-700 dark:text-yellow-300"
+              : "text-gray-800 dark:text-gray-200 hover:text-blue-700 dark:hover:text-yellow-400 hover:border-b-2 border-blue-400 dark:border-yellow-400 px-2 py-0.5 transition-colors duration-200"
+          }
+        >
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/all-articles"
+          className={({ isActive }) =>
+            isActive
+              ? "border-b-2 pb-1 font-bold text-blue-700 dark:text-yellow-300"
+              : "text-gray-800 dark:text-gray-200 hover:text-blue-700 dark:hover:text-yellow-400 hover:border-b-2 border-blue-400 dark:border-yellow-400 px-2 py-0.5 transition-colors duration-200"
+          }
+        >
+          All Articles
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/about-us"
+          className={({ isActive }) =>
+            isActive
+              ? "border-b-2 pb-1 font-bold text-blue-700 dark:text-yellow-300"
+              : "text-gray-800 dark:text-gray-200 hover:text-blue-700 dark:hover:text-yellow-400 hover:border-b-2 border-blue-400 dark:border-yellow-400 px-2 py-0.5 transition-colors duration-200"
+          }
+        >
+          About Us
+        </NavLink>
+      </li>
+
+      {/* Admin/User extra links */}
+{user && (role === "admin" || role === "user") && (
+  <>
+    <li>
+      <NavLink
+        to="/all-authors"
+        className={({ isActive }) =>
+          isActive
+            ? "border-b-2 pb-1 font-bold text-blue-700 dark:text-yellow-300"
+            : "text-gray-800 dark:text-gray-200 hover:text-blue-700 dark:hover:text-yellow-400 hover:border-b-2 border-blue-400 dark:border-yellow-400 px-2 py-0.5 transition-colors duration-200"
+        }
+      >
+        All Authors
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/dashboard"
+        className={({ isActive }) =>
+          isActive
+            ? "border-b-2 pb-1 font-bold text-blue-700 dark:text-yellow-300"
+            : "text-gray-800 dark:text-gray-200 hover:text-blue-700 dark:hover:text-yellow-400 hover:border-b-2 border-blue-400 dark:border-yellow-400 px-2 py-0.5 transition-colors duration-200"
+        }
+      >
+        Dashboard
+      </NavLink>
+    </li>
+  </>
+)}
+
+
+     {/* Author dropdown */}
+{user && role === "author" && (
+  <li className="dropdown">
+    <span className="cursor-pointer text-gray-800 dark:text-gray-200 hover:text-blue-700 dark:hover:text-yellow-400 transition-colors duration-200">
+      Articles ▼
+    </span>
+    <ul className="dropdown-content bg-base-100 dark:bg-gray-800 rounded-box p-2 shadow mt-2">
+      <li>
+        <NavLink
+          to="/post-articles"
+          className={({ isActive }) =>
+            isActive
+              ? "text-blue-700 dark:text-yellow-300 font-bold"
+              : "text-gray-800 dark:text-gray-200 hover:text-blue-700 dark:hover:text-yellow-400 px-2 py-0.5 rounded transition-colors duration-200"
+          }
+        >
+          Post Article
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/my-posted-articles"
+          className={({ isActive }) =>
+            isActive
+              ? "text-blue-700 dark:text-yellow-300 font-bold"
+              : "text-gray-800 dark:text-gray-200 hover:text-blue-700 dark:hover:text-yellow-400 px-2 py-0.5 rounded transition-colors duration-200"
+          }
+        >
+          My Articles
+        </NavLink>
+      </li>
+    </ul>
+  </li>
+)}
+
+    </ul>
+  </>
+);
+
 
   return (
     <div className=" fixed z-50 top-0 left-0 w-full  flex justify-center mx-auto">
@@ -182,7 +203,7 @@ const Navbar = () => {
                 alt=""
               />
               <img
-                className="block sm:hidden lg:hidden dark:block w-10"
+                className="block sm:hidden lg:hidden  w-10"
                 src={"/mainLogo.png"}
                 alt=""
               />
@@ -193,6 +214,12 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1">{NavLinks}</ul>
         </div>
         <div className="navbar-end">
+            {/* Bookmark Icon */}
+  {user && (
+    <Link to="/bookmarks" title="My Bookmarks">
+      <FaBookmark className="text-yellow-500 hover:text-yellow-400 transition-colors mr-2 cursor-pointer" size={22} />
+    </Link>
+  )}
           <div className="pr-2">
             <label className="toggle text-blue-700 ">
               <input

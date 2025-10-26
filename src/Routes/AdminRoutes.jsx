@@ -3,6 +3,7 @@ import { useLocation } from "react-router";
 import { Navigate } from "react-router";
 import AuthHook from "../Hooks/AuthHook";
 import UseUserRole from "../Hooks/UseUserRole";
+import Loading from "../Pages/Loading/Loading";
 
 
 const AdminRoute = ({ children }) => {

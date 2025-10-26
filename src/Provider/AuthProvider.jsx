@@ -56,7 +56,7 @@ const AuthProvider = ({ children }) => {
       if (currentUser?.email) {
         try {
           const res = await fetch(
-            "https://assignment-12-server-one-eosin.vercel.app/jwt",
+            "https://assignment-11-server-sigma-lime.vercel.app/jwt",
             {
               method: "POST",
               headers: {
