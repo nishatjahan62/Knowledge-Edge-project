@@ -14,7 +14,7 @@ const FeaturedArticles = () => {
       .catch((error) => console.log(error));
   }, []);
   return (
-    <div>
+    <div className="mt-5 lg:mt-14">
       <h2 className="text-center font-bold text-4xl text-[#305CDE] dark:text-[#f3f1d3] py-10 ">
         <Typewriter
           words={[" Featured Articles"]}

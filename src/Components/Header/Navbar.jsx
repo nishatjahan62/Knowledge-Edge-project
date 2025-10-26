@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router";
 import AuthHook from "../../Hooks/AuthHook";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import Button from "../../Pages/Button/Button";
 
 const Navbar = () => {
   const { user, logOut } = AuthHook();
@@ -103,6 +104,22 @@ const Navbar = () => {
             </NavLink>
           )}
         </li>
+         <li>
+          {" "}
+          {user && (
+            <NavLink
+              to="/dashboard"
+              className={({ isActive }) =>
+                isActive
+                  ? " border-b-3 pb-1 text-blue-700 font-bold"
+                  : "hover:border  hover:border-none hover:rounded-2xl  hover:bg-blue-100 dark:hover:bg-gray-700 px-2 py-0.5"
+              }
+            >
+              {" "}
+             Dashboard
+            </NavLink>
+          )}
+        </li>
         <li>
           {" "}
           {user && (
@@ -152,15 +169,25 @@ const Navbar = () => {
               {NavLinks}
             </ul>
           </div>
-          <Link to={"/about-us"}><div>
-            <img
-              className="block  dark:hidden w-50 lg:p-2"
-              src={"/Logo&Name.png"}
-              alt=""
-            />
-          <img className="hidden dark:block w-50 p-2" src={"/Logo&NameDark.png"} alt="" />
-          </div></Link>
-      
+          <Link to={"/about-us"}>
+            <div>
+              <img
+                className="hidden sm:block lg:block dark:hidden w-50 lg:p-2"
+                src={"/Logo&Name.png"}
+                alt=""
+              />
+              <img
+                className=" hidden sm:dark:block lg:dark:block w-50 p-2"
+                src={"/Logo&NameDark.png"}
+                alt=""
+              />
+              <img
+                className="block sm:hidden lg:hidden dark:block w-10"
+                src={"/mainLogo.png"}
+                alt=""
+              />
+            </div>
+          </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{NavLinks}</ul>
@@ -271,25 +298,9 @@ const Navbar = () => {
             <Link to="auth/Login">
               <button
                 href="#_"
-                className="inline-flex items-center justify-center px-3 py-2 lg:px-5 lg:py-3 lg:text-base lg:font-bold text-center  border border-blue-500 rounded-full shadow-sm cursor-pointer hover:text-white bg-gradient-to-br from-blue-500 via-blue-500 to-blue-500 text-white"
+                className="inline-flex items-center justify-center px-3  lg:px-5  lg:text-base lg:font-bold "
               >
-                <svg
-                  className="w-5 h-5 mr-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  ></path>
-                </svg>
-                <span className="relative font-bold font-[poppins]">
-                  Login{" "}
-                </span>
+                <Button label="Login"></Button>
               </button>
             </Link>
           )}

@@ -1,17 +1,16 @@
+import { useEffect, useState } from "react";
 import {
-  createUserWithEmailAndPassword,
   getAuth,
-  GoogleAuthProvider,
-  onAuthStateChanged,
+  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile,
+  GoogleAuthProvider,
   signInWithPopup,
   signOut,
-  updateProfile,
 } from "firebase/auth";
-import { app } from "../Firebase/Firebase.init";
-import { useEffect, useState } from "react";
 import AuthContext from "./AuthContext";
-import axios from "axios";
+import { app } from "../Firebase/Firebase.init";
 
 const auth = getAuth(app);
 
@@ -19,75 +18,90 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // sign up (create user)
+  // Sign up
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
-  // User signIN
 
-  const logIn = (email, password) => {
+  // Sign In
+  const signIn = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // user signUp
+  // Sign Out
   const logOut = () => {
-    // console.log("logging out");
-    localStorage.removeItem("access-token");
+    localStorage.removeItem("access-token"); // remove JWT on logout
     return signOut(auth);
   };
-  // User update
-  const updateUser = (updatedData) => {
-    return updateProfile(auth.currentUser, updatedData);
+
+  // Update User
+  const updateUser = (updateData) => {
+    return updateProfile(auth.currentUser, updateData);
   };
 
-  // signIN with google
+  // Google SignIn
   const googleProvider = new GoogleAuthProvider();
   const SignInWithGoogle = () => {
     return signInWithPopup(auth, googleProvider);
   };
 
-  // Observer
+  // 🔹 Observer: fetch fresh JWT whenever user changes
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       setLoading(false);
 
-      // jwt call
       if (currentUser?.email) {
-        const userData = { email: currentUser.email };
-        axios
-          .post(
-            "https://assignment-11-server-sigma-lime.vercel.app/jwt",
-            userData
-          )
-          .then((res) => {
-            const token = res.data.token;
-            localStorage.setItem("access-token", token);
-          })
-          .catch((err) => console.log(err));
+        try {
+          const res = await fetch(
+            "https://assignment-12-server-one-eosin.vercel.app/jwt",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email: currentUser.email }),
+            }
+          );
+
+          const data = await res.json();
+
+          if (data.token) {
+            localStorage.setItem("access-token", data.token);
+            console.log(" New JWT generated and stored!");
+          } else {
+            localStorage.removeItem("access-token");
+            console.warn(" No token returned from backend.");
+          }
+        } catch (err) {
+          localStorage.removeItem("access-token");
+          console.error("JWT fetch failed:", err);
+        }
       } else {
         localStorage.removeItem("access-token");
       }
     });
 
-    return () => {
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
-  const authInfo = {
+  const authData = {
+    createUser,
+    signIn,
+    logOut,
     user,
     setUser,
     loading,
     setLoading,
-    createUser,
-    logOut,
-    logIn,
     updateUser,
     SignInWithGoogle,
   };
-  return <AuthContext value={authInfo}>{children}</AuthContext>;
+
+  return (
+    <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>
+  );
 };
+
 export default AuthProvider;

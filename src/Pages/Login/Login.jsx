@@ -1,168 +1,168 @@
-import React, { use, useRef, useState } from "react";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router";
+import SignIn from "../../../public/Login.png"
 import Swal from "sweetalert2";
-import toast from "react-hot-toast";
 
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
-import AuthContext from "../../Provider/AuthContext";
+import { motion } from "framer-motion";
+import LightLogo from "../../../public/Logo&Name.png";
+import DarkLogo from "../../../public/Logo&NameDark.png";
+import AuthHook from "../../Hooks/AuthHook";
+import GoogleLogin from "./GoogleLogin";
 
 const Login = () => {
-  const { logIn, SignInWithGoogle } = use(AuthContext);
-  const [error, setError] = useState();
-  const location = useLocation();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const navigate = useNavigate();
-  const from = location.state || "/";
-  const emailRef = useRef();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const [authError, setAuthError] = useState("");
+  const { signIn } = AuthHook();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const email = form.email.value;
-    const password = form.password.value;
+  const onsubmit = (data) => {
+    const { email, password } = data;
+    setAuthError("");
 
-    logIn(email, password)
+    signIn(email, password)
       .then((res) => {
-        const user = res.user;
-        // console.log(user);
+        Swal.fire({
+          title: "Welcome Back!",
+          text: "You have successfully logged in.",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         navigate(from);
-        Swal.fire({
-          title: "Welcome Back!",
-          text: "You have successfully logged in. ",
-          icon: "success",
-        });
       })
-      .catch((err) => {
-        const errorMessage = err.message;
-        setError(errorMessage);
-      });
-  };
-  const handleGoogleSignIn = (e) => {
-    e.preventDefault();
-    SignInWithGoogle()
-      .then((res) => {
-        const user = res.user;
-        // console.log(user);
-        navigate(`${location.state ? location.state : "/"}`);
-        Swal.fire({
-          title: "Welcome Back!",
-          text: "You have successfully logged in. ",
-          icon: "success",
-        });
-      })
-      .catch((err) => {
-        const errorMessage = err.message;
-        setError(errorMessage);
-      });
-  };
-
-  const handleForgetPassword = () => {
-    const email = emailRef.current.value;
-    const auth = getAuth();
-    sendPasswordResetEmail(auth, email)
-      .then(() => {
-        toast.success("A new Password has been sent in your email.", {});
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        setError(errorMessage);
+      .catch(() => {
+        setAuthError("Login failed. Please check your credentials.");
       });
   };
 
   return (
-    <div>
-      <div className="flex justify-center items-center min-h-screen font-[lora] lg:pt-20 pt-15 px-5">
-        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl mx-auto  border-blue-500 border">
-          <div className="">
-            <div className="text-center font-semibold text-lg font-[poppins] pt-5 ">
-              <h2 className="text-black text-xl">Welcome back</h2>
-              <h3 className="text-blue-700 text-2xl font-[poppins]">
-                Login your account{" "}
-              </h3>
-            </div>
-            <div
-              onClick={handleGoogleSignIn}
-              className="flex justify-center mt-2"
-            >
-              <button className="btn bg-white text-black border-blue-400">
-                <svg
-                  aria-label="Google logo"
-                  width="16"
-                  height="16"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 512 512"
-                >
-                  <g>
-                    <path d="m0 0H512V512H0" fill="#fff"></path>
-                    <path
-                      fill="#34a853"
-                      d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"
-                    ></path>
-                    <path
-                      fill="#4285f4"
-                      d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"
-                    ></path>
-                    <path
-                      fill="#fbbc02"
-                      d="m90 341a208 200 0 010-171l63 49q-12 37 0 73"
-                    ></path>
-                    <path
-                      fill="#ea4335"
-                      d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"
-                    ></path>
-                  </g>
-                </svg>
-                Login with Google
-              </button>
-            </div>
-            <form onSubmit={handleLogin} className="card-body">
-              <fieldset className="fieldset">
-                {/* email */}
-                <label className="label focus:border-blue-500">Email</label>
-                <input
-                  name="email"
-                  type="email"
-                  ref={emailRef}
-                  className="input focus:border-blue-500"
-                  placeholder="Email"
-                  required
+    <motion.div
+      className="w-full min-h-screen bg-base-200 dark:bg-gray-900 flex items-center justify-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="flex flex-col lg:flex-row w-full max-w-none h-full">
+        {/* Form container */}
+        <motion.div
+          className="w-full lg:w-1/2 flex items-center justify-center p-10"
+          initial={{ x: 200, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.7 }}
+        >
+          <div className="w-full max-w-md">
+            <Link to={"/"}>
+              <div className="flex justify-start mb-4">
+                <img
+                  src={LightLogo}
+                  alt="Light Logo"
+                  className=" lg:block dark:hidden w-32"
                 />
-                {/* password */}
-                <label className="label focus:border-blue-500">Password</label>
-                <input
-                  name="password"
-                  type="password"
-                  className="input focus:border-blue-500"
-                  placeholder="Password"
-                  required
+                <img
+                  src={DarkLogo}
+                  alt="Dark Logo"
+                  className="hidden lg:dark:block w-32"
                 />
-                <div onClick={handleForgetPassword}>
-                  <a className="link link-hover">Forgot password?</a>
-                </div>
-                {error && <p className="text-red-600"> {error}</p>}
-
-                <button type="submit" className="w-40 mx-auto">
-                  <div class="relative rounded py-2 overflow-hidden group bg-blue-500  hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300">
-                    <span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
-                    <span class="relative text-xl font-bold">Login</span>
-                  </div>
-                </button>
-              </fieldset>
-              <div className="font-semibold text-lg text-center pt-2 ">
-                <p>
-                  Don't have an account?
-                  <Link
-                    to="/auth/register"
-                    className="font-bold text-blue-700 link link-hover px-1"
-                  >
-                    Register
-                  </Link>
-                </p>
               </div>
+            </Link>
+
+            <h2 className="text-3xl font-bold text-primary mb-6">
+              Welcome Back
+            </h2>
+            <p className="py-1 text-lg text-gray-700 dark:text-gray-300">
+              Login with{" "}
+              <span className="poppins text-primary">"KnowledgeEdge"</span>
+            </p>
+            <form onSubmit={handleSubmit(onsubmit)} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  {...register("email", { required: "Email is required" })}
+                  className="w-full px-4 py-2 mt-1 border rounded-md bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-400"
+                  placeholder="you@example.com"
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
+                  className="w-full px-4 py-2 mt-1 border rounded-md bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-400"
+                  placeholder="Enter your password"
+                />
+                {errors.password && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+
+              {authError && <p className="text-red-500 text-sm">{authError}</p>}
+
+              <button
+                type="submit"
+                className="cursor-pointer rounded w-full py-2.5 overflow-hidden group bg-primary relative hover:to-secondary text-white hover:ring-2 hover:ring-offset-2 hover:ring-primary transition-all ease-out duration-300"
+              >
+                <span className="absolute right-0 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+                <span className="relative">Sign In</span>
+              </button>
+
+              <p className="hover:underline">
+                <Link to="/auth/forget-password">Forget Password?</Link>
+              </p>
+              <p className="text-sm text-center text-gray-600 dark:text-gray-400">
+                Don’t have an account?{" "}
+                <Link
+                  to="/auth/register"
+                  className="text-teal-600 hover:underline"
+                >
+                  Register here
+                </Link>
+              </p>
             </form>
+
+            <div className="w-full text-center mt-4">
+              <p className="text-gray-600 dark:text-gray-400">OR</p>
+              <GoogleLogin />
+            </div>
           </div>
-        </div>
+        </motion.div>
+
+        {/* Image container */}
+        <motion.div
+          className="w-full lg:w-1/2 bg-[#FAFDF0] dark:bg-gray-800 flex items-center justify-center p-10"
+          initial={{ x: -200, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.7 }}
+        >
+          <img
+            src={SignIn}
+            alt="Login illustration"
+            className="max-w-full h-auto object-contain"
+          />
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

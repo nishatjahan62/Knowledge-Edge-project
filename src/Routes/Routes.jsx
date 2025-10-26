@@ -12,32 +12,35 @@ import ErrorLayout from "../Layouts/ErrorLayout";
 import CategoryPage from "../Components/Hero/CategoryPage";
 import ArticleDetails from "../Pages/articleDetails/ArticleDetails";
 import PrivateRoute from "../Provider/PrivateRoute";
-import PostArticles from "../Pages/PostArticles/PostArticles";
-import MyArticles from "../Pages/MyArticles/MyArticles";
+import DashboardLayout from "../Layouts/DashboardLayout";
+import DashboardHome from "../Pages/Dashboard/DashboardHome/DashboardHome";
+import Profile from "../Pages/Dashboard/Profile/Profile";
+import TransactionHistory from "../Pages/Dashboard/Admin/TransactionHistory";
+import ManageUsers from "../Pages/Dashboard/Admin/ManageUsers";
+import MyFollowers from "../Pages/Dashboard/Author/MyFollowers";
+import MyApplications from "../Pages/Dashboard/User/MyApplications";
+
+import Applications from "../Pages/Dashboard/Admin/Applications";
+import ApplyForAuthorRole from "../Pages/Dashboard/User/ApplyForAuthorRole";
+import PostArticles from "../Pages/Dashboard/Author/PostArticles";
+import MyArticles from "../Pages/Dashboard/Author/MyArticles";
 import UpdateArticle from "../Pages/UpdateArticle/UpdateArticle";
+import ForbiddenPage from "../Pages/Error/ForbiddenPage";
+import Overview from "../Pages/Dashboard/Overview/Overview";
+
+
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout></MainLayout>,
-    errorElement: <ErrorPage></ErrorPage>,
+    element: <MainLayout />,
+    errorElement: <ErrorPage />,
     children: [
-      {
-        index: true,
-        path: "/",
-        element: <Home></Home>,
-        hydrateFallbackElement: <Loading></Loading>,
-      },
-      {
-        path: "all-articles",
-        element: <AllArticles></AllArticles>,
-      },
-      {
-        path: "about-us",
-        element: <AboutUs></AboutUs>,
-      },
+      { index: true, path: "/", element: <Home />, hydrateFallbackElement: <Loading /> },
+      { path: "all-articles", element: <AllArticles /> },
+      { path: "about-us", element: <AboutUs /> },
       {
         path: "article-by-category/:category",
-        element: <CategoryPage></CategoryPage>,
+        element: <CategoryPage />,
         loader: ({ params }) =>
           fetch(
             `https://assignment-11-server-sigma-lime.vercel.app/articles/?category=${params.category}`
@@ -45,8 +48,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "article/:id",
-        element: <ArticleDetails></ArticleDetails>,
-
+        element: <ArticleDetails />,
         loader: ({ params }) =>
           fetch(
             `https://assignment-11-server-sigma-lime.vercel.app/articles/${params.id}`
@@ -56,7 +58,7 @@ export const router = createBrowserRouter([
         path: "post-articles",
         element: (
           <PrivateRoute>
-            <PostArticles></PostArticles>
+            <PostArticles />
           </PrivateRoute>
         ),
       },
@@ -64,7 +66,7 @@ export const router = createBrowserRouter([
         path: "my-posted-articles",
         element: (
           <PrivateRoute>
-            <MyArticles></MyArticles>
+            <MyArticles />
           </PrivateRoute>
         ),
       },
@@ -72,10 +74,10 @@ export const router = createBrowserRouter([
         path: "update-article/:id",
         element: (
           <PrivateRoute>
-            <UpdateArticle></UpdateArticle>
+          <UpdateArticle />
           </PrivateRoute>
         ),
-        hydrateFallbackElement: <Loading></Loading>,
+        hydrateFallbackElement: <Loading />,
         loader: ({ params }) =>
           fetch(
             `https://assignment-11-server-sigma-lime.vercel.app/articles/${params.id}`
@@ -85,27 +87,101 @@ export const router = createBrowserRouter([
   },
   {
     path: "/auth",
-    element: <AuthLayout></AuthLayout>,
-    errorElement: <ErrorPage></ErrorPage>,
+    element: <AuthLayout />,
+    errorElement: <ErrorPage />,
     children: [
-      {
-        path: "/auth/Login",
-        element: <Login></Login>,
-      },
-      {
-        path: "/auth/register",
-        element: <Register></Register>,
-      },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
     ],
   },
   {
     path: "/",
-    element: <ErrorLayout></ErrorLayout>,
-    errorElement: <ErrorPage></ErrorPage>,
+    element: <ErrorLayout />,
+    errorElement: <ErrorPage />,
     children: [
+      { path: "*", element: <ErrorPage /> },
+      { path: "forbidden", element: <ForbiddenPage /> },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout/>
+      </PrivateRoute>
+    ),
+    children: [
+      { index: true, element: <DashboardHome /> },
+      { path: "overview", element: <Overview /> },
+      { path: "profile", element: <Profile/> },
+
+      // Admin Routes
       {
-        path: "*",
-        element: <ErrorPage></ErrorPage>,
+        path: "applications",
+        element: (
+       
+            <Applications/>
+    
+        ),
+      },
+      {
+        path: "transaction-history",
+        element: (
+            <TransactionHistory />
+        
+        ),
+      },
+      {
+        path: "manage-users",
+        element: (
+      
+            <ManageUsers />
+         
+        ),
+      },
+
+      // Author Routes
+      {
+        path: "my-followers",
+        element: (
+         
+            <MyFollowers />
+         
+        ),
+      },
+      {
+        path: "my-applications",
+        element: (
+         
+            <MyApplications />
+     
+        ),
+      },
+
+      // User Routes
+      {
+        path: "apply-for-author",
+        element: (
+          <PrivateRoute>
+          <ApplyForAuthorRole></ApplyForAuthorRole>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "my-applications",
+        element: (
+          <PrivateRoute>
+            <MyApplications/>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "my-transaction-history",
+        element: (
+          <PrivateRoute>
+            <TransactionHistory />
+          </PrivateRoute>
+        ),
       },
     ],
   },

@@ -5,6 +5,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
+import Button from "../Button/Button";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 
 const ArticleDetails = () => {
   const {
@@ -16,6 +18,7 @@ const ArticleDetails = () => {
     author_name,
     author_photo,
     _id,
+    author_email,
   } = useLoaderData();
 
   const safeTags = Array.isArray(tags)
@@ -34,8 +37,14 @@ const ArticleDetails = () => {
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
 
-  //   Format publication date:
+  // bookmark
+  const [bookmarked, setBookmarked] = useState(false);
 
+  // follow
+  const [followers, setFollowers] = useState(0);
+  const [following, setFollowing] = useState(false);
+
+  // Format publication date:
   const newPublicationDate = new Date(publication_date).toLocaleDateString(
     "en-US",
     {
@@ -66,20 +75,38 @@ const ArticleDetails = () => {
       })
       .catch((err) => console.log(err));
 
+    // fetch bookmark and like status
     if (user) {
       axios
         .get("https://assignment-11-server-sigma-lime.vercel.app/all-articles")
         .then((res) => {
           const articles = res.data.find((ar) => ar._id === _id);
-          if (articles?.likeUsers?.includes(user.email)) {
-            setLiked(true);
-          }
+          if (articles?.likeUsers?.includes(user.email)) setLiked(true);
         });
+
+      axios
+        .get(
+          `https://assignment-11-server-sigma-lime.vercel.app/bookmarks?email=${user.email}`
+        )
+        .then((res) => {
+          if (res.data?.bookmarkedIds?.includes(_id)) setBookmarked(true);
+        })
+        .catch(console.error);
+
+      // fetch follower info
+      axios
+        .get(
+          `https://assignment-11-server-sigma-lime.vercel.app/authors/${author_email}/followers`
+        )
+        .then((res) => {
+          setFollowers(res.data.followerCount || 0);
+          if (res.data.followerUsers?.includes(user.email)) setFollowing(true);
+        })
+        .catch(console.error);
     }
   }, [_id, user]);
 
-  // comments handle =>
-
+  // comments handle
   const handleComment = (e) => {
     e.preventDefault();
     if (!user) return;
@@ -112,15 +139,17 @@ const ArticleDetails = () => {
     }
   };
 
-  // handle likes =>
-
+  // handle likes
   const handleLike = () => {
+    if (!user) {
+      toast.error("You need to login to like this article.");
+      return;
+    }
+
     axios
       .post(
         `https://assignment-11-server-sigma-lime.vercel.app/articles/${_id}/like`,
-        {
-          user_email: user.email,
-        },
+        { user_email: user.email },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access-token")}`,
@@ -128,12 +157,77 @@ const ArticleDetails = () => {
         }
       )
       .then((res) => {
-        if (res.data.alreadyLiked) {
+        if (res.data.alreadyLiked)
           toast.error("You already liked this article");
-        } else {
-          toast.success("Thanks fot Liking!");
+        else {
+          toast.success("Thanks for Liking!");
           setLiked(true);
           setLikes(res.data.likeCount);
+        }
+      })
+      .catch(console.error);
+  };
+
+  // handle bookmark
+  const handleBookmark = () => {
+    if (!user) {
+      toast.error("You need to login to bookmark articles.");
+      return;
+    }
+
+    axios
+      .post(
+        `https://assignment-11-server-sigma-lime.vercel.app/bookmarks`,
+        { user_email: user.email, article_id: _id },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        if (res.data.alreadyBookmarked) toast.error("Already bookmarked");
+        else {
+          toast.success("Article bookmarked!");
+          setBookmarked(true);
+        }
+      })
+      .catch(console.error);
+  };
+
+  // handle download
+  const handleDownload = () => {
+    const element = document.createElement("a");
+    const file = new Blob([content], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = `${title}.txt`;
+    document.body.appendChild(element);
+    element.click();
+  };
+
+  // handle follow
+  const handleFollow = () => {
+    if (!user) {
+      toast.error("You need to login to follow this author.");
+      return;
+    }
+
+    axios
+      .post(
+        `https://assignment-11-server-sigma-lime.vercel.app/authors/${author_email}/follow`,
+        { user_email: user.email },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access-token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        if (res.data.alreadyFollowing) toast.error("Already following");
+        else {
+          toast.success("Now following author!");
+          setFollowing(true);
+          setFollowers(res.data.followersCount);
         }
       })
       .catch(console.error);
@@ -151,16 +245,15 @@ const ArticleDetails = () => {
               <p className=" text-center text-sm pt-2 font-bold text-blue-800 dark:text-blue-400">
                 <span className="text-black dark:text-white pr-1">
                   Published on :{" "}
-                </span>{" "}
+                </span>
                 {newPublicationDate}
               </p>
               <p className="py-6 text-center">{content}</p>
 
               <div className="text-left px-5">
                 <p className="text-blue-700 dark:text-blue-400 text-lg font-semibold pb-3">
-                  {" "}
                   category :{" "}
-                  <span className="font-medium text-black dark:text-white pl-2 ">
+                  <span className="font-medium text-black dark:text-white pl-2">
                     {category}
                   </span>
                 </p>
@@ -177,94 +270,104 @@ const ArticleDetails = () => {
                 </ul>
               </div>
 
-              <div className="relative overflow-visible">
+              <div className="relative overflow-visible flex flex-col items-center mt-4">
                 <button
                   data-tooltip-id="like-tooltip"
                   data-tooltip-content="Click here to like this article"
                   data-tooltip-place="top"
                   className="flex justify-center items-center mx-auto mt-3 gap-2"
-                  onClick={() => {
-                    if (!user) {
-                      toast.error("you need to login to like this article.");
-                      return;
-                    }
-                    handleLike();
-                  }}
+                  onClick={handleLike}
                 >
                   <i className="fa-solid fa-thumbs-up text-yellow-400 cursor-pointer"></i>
                   {liked ? "liked" : "like"}
-                </button>{" "}
+                </button>
                 <Tooltip id="like-tooltip"></Tooltip>
-                <p className="text-center  pt-2">Total likes : {likes}</p>
+                <p className="text-center pt-2">Total likes : {likes}</p>
+
+                <button
+                  onClick={handleBookmark}
+                  className="flex justify-center items-center mx-auto mt-3 gap-2"
+                  data-tooltip-id="bookmark-tooltip"
+                  data-tooltip-content="Save this article for later"
+                  data-tooltip-place="top"
+                >
+                  {bookmarked ? (
+                    <FaBookmark className="text-blue-600 text-xl" />
+                  ) : (
+                    <FaRegBookmark className="text-gray-500 text-xl" />
+                  )}
+                  {bookmarked ? "Bookmarked" : "Bookmark"}
+                </button>
+                <Tooltip id="bookmark-tooltip" />
+
+                <button
+                  onClick={handleDownload}
+                  className="flex justify-center items-center mx-auto mt-3 gap-2"
+                  data-tooltip-id="download-tooltip"
+                  data-tooltip-content="Download this article as txt"
+                  data-tooltip-place="top"
+                >
+                  <i className="fa-solid fa-download"></i> Download
+                </button>
+                <Tooltip id="download-tooltip" />
               </div>
             </div>
           </div>
         </div>
         <hr className="text-blue-800 dark:text-blue-400" />
-        <div className="text-center   gap-2  mt-5">
-          {" "}
-          <div className="avatar ">
+        <div className="text-center gap-2 my-5 pb-10">
+          <div className="avatar">
             <div className="w-22 rounded-full ">
               <img alt="Tailwind CSS Navbar component" src={author_photo} />
             </div>
           </div>
           <div>
             <p className="font-bold">Author</p>
-            <p className="pb-5 text-lg font-semibold">{author_name}</p>
+            <p className="pb-1 text-lg font-semibold">{author_name}</p>
+
+            {/* Follow Button */}
+            <div className="">
+              {" "}
+              <Button
+                type="button"
+                onClick={handleFollow}
+                label={`${following ? "Following" : "Follow"} (${followers})`}
+                className={`px-4 py-2 rounded-lg font-semibold ${
+                  following ? "bg-gray-400" : "bg-blue-600 text-white"
+                }`}
+              />
+            </div>
           </div>
         </div>
       </div>
 
       {/* comment */}
-
-      <div className="mt-5  bg-[#FDFBD4] dark:bg-[#3a3a3a] p-5 rounded-2xl mx-8 lg:mx-15">
-        <form
-          className=" "
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!user) {
-              toast.error("please login to submit a comment");
-              return;
-            }
-            handleComment(e);
-          }}
-        >
+      <div className="mt-5 bg-[#FDFBD4] dark:bg-[#3a3a3a] p-5 rounded-2xl mx-8 lg:mx-15">
+        <form onSubmit={handleComment}>
           <textarea
             name="content"
-            className="textarea w-full rounded-2xl flex  lg:max-w-2xl sm:max-w-lg min-w-xs mx-auto"
+            className="textarea w-full rounded-2xl flex lg:max-w-2xl sm:max-w-lg min-w-xs mx-auto"
             placeholder="Write your comment"
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             required
           ></textarea>
-          <div>
-            <button type="submit" className=" flex justify-center mx-auto mt-5">
-              <div className="relative rounded py-2 px-4 overflow-hidden group bg-blue-500  hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300">
-                <span className="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
-                <span className="relative text-xl font-bold">
-                  Submit comment
-                </span>
-              </div>
-            </button>
+          <div className="flex justify-center mx-auto mt-5">
+            <Button type="submit" label="Submit comment"></Button>
           </div>
         </form>
       </div>
 
       {/* show comments */}
-      <div className="bg-white  rounded-2xl p-5 mt-5 dark:bg-[#3a3a3a] mx-8 lg:mx-15">
-        {" "}
+      <div className="bg-white rounded-2xl p-5 mt-5 dark:bg-[#3a3a3a] mx-8 lg:mx-15">
         <h3 className="text-left px-5 text-2xl font-bold pb-3 text-blue-600 dark:text-blue-400">
           Comments by reader : {comments.length}
         </h3>
         {comments.map((comment, index) => (
-          <div>
-            <div
-              key={index}
-              className="bg-[#FDFBD4] dark:bg-[#1D232A] rounded-2xl px-5 py-3"
-            >
+          <div key={index}>
+            <div className="bg-[#FDFBD4] dark:bg-[#1D232A] rounded-2xl px-5 py-3">
               <div className="flex items-center gap-5">
                 <div>
-                  {" "}
                   <img
                     className="lg:w-10 w-8 rounded-full"
                     src={comment.user_photo}
@@ -274,7 +377,6 @@ const ArticleDetails = () => {
                 </div>
                 <div>
                   <p className="text-lg font-semibold">{comment.comment}</p>
-
                   <p>{new Date(comment.created_at).toLocaleString()}</p>
                 </div>
               </div>

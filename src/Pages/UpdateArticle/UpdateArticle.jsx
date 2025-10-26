@@ -4,6 +4,7 @@ import AuthHook from "../../Hooks/AuthHook";
 import axios from "axios";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import Button from "../Button/Button";
 
 const UpdateArticle = ({ article, onUpdate }) => {
   const { user } = AuthHook();
@@ -127,10 +128,7 @@ const UpdateArticle = ({ article, onUpdate }) => {
             className="input w-full"
           />
           <button type="submit" className=" w-1/2 mt-3 mx-auto cursor-pointer">
-            <div class="relative rounded py-2 overflow-hidden group bg-blue-500  hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300">
-              <span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
-              <span class="relative text-xl font-bold">Update Article</span>
-            </div>
+            <Button label="Update"></Button>
           </button>
         </fieldset>
       </form>

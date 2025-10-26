@@ -18,8 +18,8 @@ const CategoryLink = () => {
   }, []);
 
   return (
-    <div className="mt-10 mx-5 lg:mx-10 bg-[#F4F2D0] dark:bg-[#252728] dark:to-[#3a3a3a]  shadow-2xl border border-[#FDFBD4] dark:border-gray-400 py-8 rounded-2xl">
-      <h2 className="text-center font-bold text-4xl dark:text-[#FDFBD4]  text-[#305CDE] pb-5 ">
+    <div className=" bg-[#F4F2D0] dark:bg-[#252728] dark:to-[#3a3a3a]  shadow-2xl border border-[#FDFBD4] dark:border-gray-400 px-5 py-8 rounded-2xl mt-5  lg:mt-14">
+      <h2 className="text-center font-bold text-2xl lg:text-3xl text-[#305CDE] pb-5 ">
         {" "}
         <Typewriter
           words={[" Explore Article By Category"]}
@@ -30,7 +30,6 @@ const CategoryLink = () => {
       </h2>
       <p className="text-md pb-5   text-center lg:max-w-[800px] mx-auto">
         Discover articles by category in a visually engaging layout. Each button
-        leads to curated content, making exploration intuitive and enjoyable.
       </p>
       <div className=" flex flex-wrap gap-10  justify-center items-center">
         {categories.map((category) => (

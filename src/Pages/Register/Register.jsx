@@ -1,154 +1,205 @@
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router";
-
 import Swal from "sweetalert2";
-import toast from "react-hot-toast";
 import AuthHook from "../../Hooks/AuthHook";
+import SingUp from "../../../public/Sign up.png"
+import LightLogo from "../../../public/Logo&Name.png";
+import DarkLogo from "../../../public/Logo&NameDark.png";
+import { motion } from "framer-motion";
+import UseAxios from "../../Hooks/UseAxios";
 
 const Register = () => {
-  const { createUser, setUser, updateUser, user } = AuthHook();
-
-  //    name & password Validation
-  const [error, setError] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const { createUser , setUser, updateUser} = AuthHook();
   const [nameError, setNameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const navigation = useNavigate();
   const location = useLocation();
-  const navigate = useNavigate();
-  const from = location.state || "/";
+  const from = location.state?.from?.pathname || "/";
+  const axiosInstance = UseAxios();
 
-  const handleRegister = (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const name = form.name.value;
-    const photo = form.photo.value;
-    const password = form.password.value;
-    const email = form.email.value;
+  const onsubmit = async (data) => {
+    const { name, email, password, imageURL } = data;
 
-    //   Validation
-    // Name Validation
+    // Name validation
     if (name.length < 6) {
-      setNameError("Name must be at least  5 character");
+      setNameError("Name must be at least 5 character");
       return;
     } else {
       setNameError("");
     }
-    // password validation
+
+    // Password validation
     const upperCase = /[A-Z]/;
     const lowerCase = /[a-z]/;
 
     if (password.length < 6) {
-      setPasswordError("password  must be at least 6 character");
+      setPasswordError("Password must be at least 6 character");
       return;
     } else if (!upperCase.test(password)) {
-      setPasswordError("PassWord must contain at Least one Uppercase letter");
+      setPasswordError("Password must contain at least one Uppercase letter");
       return;
     } else if (!lowerCase.test(password)) {
-      setPasswordError("PassWord must contain at Least one lowercase letter");
+      setPasswordError("Password must contain at least one lowercase letter");
       return;
     } else {
       setPasswordError("");
     }
+try {
+      const res = await createUser(email, password);
+      const user = res.user;
+      await updateUser({ displayName: name, photoURL:imageURL });
+      setUser({ ...user, displayName: name, photoURL: imageURL });
 
-    createUser(email, password)
-      .then((res) => {
-        res.user;
-        updateUser({ displayName: name, photoURL: photo }).then(() => {
-          setUser({ ...user, displayName: name, photoURL: photo });
-          navigate(from);
-        });
-        Swal.fire({
-          title: "Created Account",
-          text: "Your account has been registered successfully. ",
-          icon: "success",
-        });
-      })
-      .catch((err) => {
-        const errorMessage = err.message;
-        toast.error(errorMessage);
-        setError(errorMessage);
+      const userData = { name, email, role: "user", photoURL: imageURL };
+      await axiosInstance.post("/user", userData);
+      console.log(data ,"user crated")
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Account Created",
+        text: "Your account has been created successfully",
+        showConfirmButton: false,
+        timer: 1500,
       });
-  };
+
+      navigation(from);
+    } catch (err) {
+      console.log("Registration failed:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Registration Failed",
+        text: err.message,
+      });
+    }
+  };;
 
   return (
-    <div>
-      <div className="flex justify-center items-center min-h-screen font-[lora]">
-        <div className="card  border border-blue-600 bg-base-100 items-center max-w-sm shrink-0 shadow-2xl mt-30 lg:px-5">
-          <form onSubmit={handleRegister} className="card-body">
-            <div className="text-center font-semibold text-lg font-[poppins]">
-              <h2 className="text-black">Welcome</h2>
-              <h3 className="text-blue-700 text-xl font-[poppins]">
-                Register your account{" "}
-              </h3>
-            </div>
-            <fieldset className="fieldset">
-              {/* name */}
-              <label className="label focus:border-blue-300">Name</label>
-              <input
-                name="name"
-                type="name"
-                className="input focus:border-blue-400"
-                placeholder="Name"
-                required
-              />
-              {nameError && <p className="text-red-600"> {nameError}</p>}
-
-              {/* Photo URL */}
-              <label className="label focus:border-blue-300">PHoto URL</label>
-              <input
-                name="photo"
-                type="url"
-                className="input focus:border-blue-300"
-                placeholder="PhotoURL"
-                required
-              />
+    <motion.div
+      className="w-full min-h-screen bg-base-200 dark:bg-gray-900 flex items-center justify-center transition-colors duration-300"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="flex flex-col lg:flex-row w-full max-w-none h-full">
+        {/* Form container */}
+        <motion.div
+          className="w-full lg:w-1/2 flex items-center justify-center p-10"
+          initial={{ x: -200, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.7 }}
+        >
+          <div className="w-full mx-w-md">
+            <Link to={"/"}>
+              <div className="flex justify-start mb-4">
+                <img
+                  src={LightLogo}
+                  alt="Light Logo"
+                  className=" lg:block dark:hidden w-32"
+                />
+                <img
+                  src={DarkLogo}
+                  alt="Dark Logo"
+                  className="hidden lg:dark:block w-32"
+                />
+              </div>
+            </Link>
+            <h2 className="text-3xl font-bold text-primary">Create an account</h2>
+            <p className="py-1 mb-6 text-lg text-gray-600 dark:text-gray-300">
+              Register with <span className="poppins text-primary">"KnowledgeEdge"</span>
+            </p>
+            <form onSubmit={handleSubmit(onsubmit)} className="space-y-4">
+              {/* Name */}
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  {...register("name", { required: true })}
+                  className="w-full px-4 py-2 mt-1 border rounded-md bg-white dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                  placeholder="Your name"
+                />
+                {nameError && <p className="text-sm text-red-500">{nameError}</p>}
+              </div>
 
               {/* Email */}
-              <label className="label focus:border-blue-300">Email</label>
-              <input
-                name="email"
-                type="email"
-                className="input focus:border-blue-300"
-                placeholder="Email"
-                required
-              />
-              {error && <p className="text-red-600"> {error}</p>}
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  {...register("email", { required: "Email is required" })}
+                  className="w-full px-4 py-2 mt-1 border rounded-md bg-white dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                  placeholder="you@example.com"
+                />
+                {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+              </div>
 
-              {/* password */}
-              <label className="label focus:border-blue-300">Password</label>
-              <input
-                name="password"
-                type="password"
-                className="input focus:border-amber-300"
-                placeholder="Password"
-                required
-              />
-              {passwordError && (
-                <p className="text-red-600"> {passwordError}</p>
-              )}
-              <button type="submit" className="w-40 mx-auto pt-4">
-                <div class="relative rounded py-2 overflow-hidden group bg-blue-500  hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-400 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-400 transition-all ease-out duration-300">
-                  <span class="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
-                  <span class="relative text-xl font-bold">Register</span>
-                </div>
+              {/* Image URL */}
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                  Profile Image URL
+                </label>
+                <input
+                  type="text"
+                  {...register("imageURL")}
+                  className="w-full px-4 py-2 mt-1 border rounded-md bg-white dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                  placeholder="Enter image URL"
+                />
+              </div>
+
+              {/* Password */}
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  {...register("password", { required: true })}
+                  className="w-full px-4 py-2 mt-1 border rounded-md bg-white dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                  placeholder="Enter your password"
+                />
+                {passwordError && <p className="text-sm text-red-500">{passwordError}</p>}
+              </div>
+
+              <button
+                type="submit"
+                className="cursor-pointer rounded w-full py-2.5 overflow-hidden group bg-primary relative hover:to-secondary text-white hover:ring-2 hover:ring-offset-2 hover:ring-primary transition-all ease-out duration-300"
+              >
+                <span className="absolute right-0 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+                <span className="relative text-black dark:text-white">Sign up</span>
               </button>
 
-              <div className="font-semibold text-lg text-center pt-2 ">
-                <p>
-                  Already have an account?
-                  <Link
-                    className="font-bold text-blue-700 link link-hover "
-                    to="/auth/login"
-                  >
-                    {" "}
-                    Login
-                  </Link>
-                </p>
-              </div>
-            </fieldset>
-          </form>
-        </div>
+              <p className="text-sm text-center text-gray-600 dark:text-gray-300">
+                Already have an account?{" "}
+                <Link to="/auth/login" className="text-teal-600 hover:underline font-bold">
+                  Sign In here
+                </Link>
+              </p>
+            </form>
+          </div>
+        </motion.div>
+
+        {/* Image container */}
+        <motion.div
+          className="w-full lg:w-1/2 bg-[#FAFDF0] dark:bg-gray-800 flex items-center justify-center p-10 transition-colors duration-300"
+          initial={{ x: 200, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.7 }}
+        >
+          <img src={SingUp} alt="" className="max-w-full h-auto object-contain" />
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
